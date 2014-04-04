@@ -5,14 +5,9 @@ Buildout recipes for django development
 MIT license (see LICENSE.txt)
 """
 
-from distutils.core import setup
+from setuptools import setup, find_packages
 import os
 
-INC_PACKAGES = 'djangorecipebook',  # string or tuple of strings
-EXC_PACKAGES = ()  # tuple of strings
-
-install_requires = (
-)
 
 # imports __version__ variable
 exec(open('djangorecipebook/version.py').read())
@@ -28,10 +23,13 @@ DEV_STATUS = {'pre': '2 - Pre-Alpha',
               'final': '5 - Production/Stable'}
 
 # setup function parameters
-metadata = dict(
-    name='djangorecipebook',
+name = 'djangorecipebook'
+setup(
+    name=name,
+    packages=find_packages(),
     version=__version__,
     description='Buildout recipes for django development',
+    long_description=open(os.path.join('README.rst')).read(),
     author='Thomas Khyn',
     author_email='thomas@ksytek.com',
     url='http://open.ksytek.com/djangorecipebook/',  # TODO: check url
@@ -46,38 +44,10 @@ metadata = dict(
         'Framework :: Buildout :: Recipe',
         'Framework :: Django',
         'Topic :: Software Development :: Build Tools',
-    ]
+    ],
+    entry_points={'zc.buildout': ['default = %s.recipes.manage:Recipe' % name,
+                                  'manage = %s.recipes.manage:Recipe' % name,
+                                  'wsgi = %s.recipes.wsgi:Recipe' % name,
+                                  'test = %s.recipes.test:Recipe' % name, ]
+    }
 )
-
-
-# packages parsing from root packages, without importing sub-packages
-root_path = os.path.dirname(__file__)
-if isinstance(INC_PACKAGES, basestring):
-    INC_PACKAGES = (INC_PACKAGES,)
-
-packages = []
-excludes = list(EXC_PACKAGES)
-for pkg in INC_PACKAGES:
-    pkg_root = os.path.join(root_path, *pkg.split('.'))
-    for dirpath, dirs, files in os.walk(pkg_root):
-        rel_path = os.path.relpath(dirpath, pkg_root)
-        pkg_name = pkg
-        if (rel_path != '.'):
-            pkg_name += '.' + rel_path.replace(os.sep, '.')
-        for x in excludes:
-            if x in pkg_name:
-                continue
-        if '__init__.py' in files:
-            packages.append(pkg_name)
-        elif dirs:  # stops package parsing if no __init__.py file
-            excludes.append(pkg_name)
-
-
-def read(filename):
-    return open(os.path.join(root_path, filename)).read()
-
-setup(**dict(metadata,
-   packages=packages,
-   long_description=read('README.rst'),
-   install_requires=install_requires
-))
