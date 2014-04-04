@@ -2,6 +2,8 @@
 Recipe generating a test script
 """
 
+from base import BaseRecipe
 
-class Recipe(object):
+
+class Recipe(BaseRecipe):
     pass

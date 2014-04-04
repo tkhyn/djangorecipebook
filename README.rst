@@ -31,3 +31,37 @@ djangorecipebook:wsgi
 djangorecipebook:test
 
    Creates a script that runs test with a django test runner
+
+
+Options
+-------
+
+Common options
+..............
+
+project-dir
+   The directory where the project files lie, relative to the buildout.cfg
+   directory.
+
+   Defaults to `'.'` (buildout directory).
+
+settings
+   The settings module to load, imported from the project directory.
+
+   Defaults to `'settings'`.
+
+extra-paths
+   Paths to add to sys.path in the generated script.
+
+   Defaults to `[]`.
+
+script-name
+   The name of the script that should be generated.
+
+   Defaults to the part name.
+
+initialization
+   Some (basic) python initialization code to insert in the generated script.
+   Don't forget that leading whitespaces are stripped.
+
+   Defaults to none.
