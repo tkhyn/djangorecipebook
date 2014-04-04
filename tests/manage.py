@@ -30,30 +30,30 @@ class ManageRecipeTests(RecipeTests):
     recipe_options = {'recipe': 'djangorecipebook:manage'}
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
-                    return_value=(None, []))
+                return_value=(None, []))
     def test_install(self, working_set):
         # Default install of a management script, check that the call to
         # djangorecipebook.manage.main is present
         self.recipe.install()
-        manage = self.script_path('manage')
-        self.assertTrue(os.path.exists(manage))
-        self.assertTrue(("djangorecipebook.recipes.manage.main('%s')" % \
-                         test_settings) in self.script_cat(manage))
+        manage_script = self.script_path('manage')
+        self.assertTrue(os.path.exists(manage_script))
+        self.assertIn(("djangorecipebook.recipes.manage.main('%s')" % \
+                     test_settings), self.script_cat(manage_script))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
-                    return_value=(None, []))
+                return_value=(None, []))
     def test_create_manage_script_projectdir(self, working_set):
         # When a project dir is specified, it should be added to sys.path
         self.init_recipe({'project-dir': test_project})
         self.recipe.install()
-        self.assertTrue(os.path.join(self.buildout_dir, test_project) \
-                        in self.script_cat('manage'))
+        self.assertIn(os.path.join(self.buildout_dir, test_project),
+                      self.script_cat('manage'))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
-                    return_value=(None, []))
+                return_value=(None, []))
     def test_create_manage_script_with_initialization(self, working_set):
         # When an init code is specified, it should be added to the script
         self.init_recipe({'initialization': 'import os\nassert True'})
         self.recipe.install()
-        self.assertTrue('import os\nassert True\n\nimport djangorecipebook'
-                        in self.script_cat('manage'))
+        self.assertIn('import os\nassert True\n\nimport djangorecipebook',
+                      self.script_cat('manage'))
