@@ -9,6 +9,10 @@ buildout
 .installed.cfg
 djangorecipebook.egg-info
 
+# coverage
+tests/.coverage
+tests/coverage
+
 # eclipse project related files and folders
 .pydevproject
 .project

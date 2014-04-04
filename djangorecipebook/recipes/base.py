@@ -10,25 +10,27 @@ class BaseRecipe(object):
 
     def __init__(self, buildout, name, options):
 
-        root_dir = buildout['buildout']['directory']
-
         # recipe book's egg
-        self.egg = Egg(buildout, options['recipe'], options)
+        self.egg = Egg(buildout, options['recipe'].split(':')[0], options)
+        self.name = name
+        self.buildout = buildout
+
+        root_dir = self.buildout['buildout']['directory']
 
         # extraction of buildout parameters
-        self.bin_dir = buildout['buildout']['bin-directory']
+        self.bin_dir = self.buildout['buildout']['bin-directory']
 
         # extraction of common options
         proj_dir = options.get('project-dir', '.')
-        self.proj_dir = os.path.normpath(root_dir, proj_dir)
+        self.proj_dir = os.path.normpath(os.path.join(root_dir, proj_dir))
         self.settings = options.get('settings', 'settings')
-        self.script_name = options.get('script-name', name)
-        self.init = options.get('initializiation', '')
+        self.init = options.get('initialization', '')
 
         extra_paths = [root_dir]
         if proj_dir != '.':
             extra_paths.append(self.proj_dir)
-        for path in self.options.get('extra-paths', '').splitlines():
+        for path in options.get('extra-paths', '').splitlines():
             path = path.strip()
             if path:
                 extra_paths.append(os.path.normpath(path))
+        self.extra_paths = extra_paths
