@@ -26,7 +26,6 @@ DEV_STATUS = {'pre': '2 - Pre-Alpha',
 name = 'djangorecipebook'
 setup(
     name=name,
-    packages=find_packages(),
     version=__version__,
     description='Buildout recipes for django development',
     long_description=open(os.path.join('README.rst')).read(),
@@ -45,9 +44,20 @@ setup(
         'Framework :: Django',
         'Topic :: Software Development :: Build Tools',
     ],
+    packages=find_packages(exclude=('tests',)),
+    include_package_data=True,
+    package_data={
+        '': ['LICENSE.txt', 'README.rst']
+    },
     entry_points={'zc.buildout': ['default = %s.recipes.manage:Recipe' % name,
                                   'manage = %s.recipes.manage:Recipe' % name,
                                   'wsgi = %s.recipes.wsgi:Recipe' % name,
                                   'test = %s.recipes.test:Recipe' % name, ]
-    }
+    },
+    install_requires=(
+        'zc.buildout',
+        'zc.recipe.egg',
+        'django',
+    ),
+    extras_require={'tests': ('coverage',)},
 )
