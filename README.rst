@@ -30,7 +30,7 @@ djangorecipebook:wsgi
 
 djangorecipebook:test
 
-   Creates a script that runs test with a django test runner
+   Creates a script that invokes `manage.py test [apps]`
 
 
 Options
@@ -82,3 +82,12 @@ log-level
 
    Defaults to `INFO`.
 
+Test options
+............
+
+apps
+   The names of the apps that should be tested, separated by spaces or
+   line-breaks. If it is empty, tests will run for all the apps in
+   `INSTALLED_APPS`.
+
+   Defaults to `` (all apps)
