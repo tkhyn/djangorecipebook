@@ -20,6 +20,9 @@ class Recipe(BaseRecipe):
             arguments="'%s'" % self.settings,
             initialization=self.init)
 
+    def update(self):
+        self.install()
+
 
 def main(settings_module):
     # called on script execution

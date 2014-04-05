@@ -61,6 +61,9 @@ class Recipe(BaseRecipe):
 
         return script
 
+    def update(self):
+        self.install()
+
 
 def main(settings_file, logfile=None, level=logging.INFO):
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_file)

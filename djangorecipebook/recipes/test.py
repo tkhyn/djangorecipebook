@@ -29,6 +29,9 @@ class Recipe(BaseRecipe):
             arguments="'%s'%s" % (self.settings, apps),
             initialization=self.init)
 
+    def update(self):
+        self.install()
+
 
 def main(settings_file, *apps):
     from django.core import management
