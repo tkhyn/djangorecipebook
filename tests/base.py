@@ -25,16 +25,11 @@ class ScriptTests(unittest.TestCase):
     def setUp(self):
         # fake the settings file's module
         self.settings = mock.sentinel.Settings
-        self.settings.SECRET_KEY = 'I mock your secret key'
-        sys.modules[test_project] = mock.sentinel.CheeseShop
-        sys.modules[test_project + '.' + test_settings] = self.settings
-        setattr(sys.modules[test_project], test_settings, self.settings)
-        print("DJANGO ENV: %s" % os.environ.get('DJANGO_SETTINGS_MODULE'))
+        sys.modules[test_settings] = self.settings
 
     def tearDown(self):
         # We will clear out sys.modules again to clean up
-        for m in [test_project, test_project + '.' + test_settings]:
-            del sys.modules[m]
+        del sys.modules[test_settings]
 
 
 class RecipeTests(unittest.TestCase):
