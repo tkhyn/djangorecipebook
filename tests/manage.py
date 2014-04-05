@@ -16,11 +16,10 @@ class ManageScriptTests(ScriptTests):
         # script. It has all the same bells and whistles since all it
         # does is call the normal Django stuff.
         manage.main(test_settings)
-        self.assertEqual(mock_execute.call_args,
-                         ((sys.argv,), {}))
-        self.assertEqual(
-            mock_setdefault.call_args,
-            (('DJANGO_SETTINGS_MODULE', test_settings), {}))
+        self.assertTupleEqual(mock_execute.call_args,
+                              ((sys.argv,), {}))
+        self.assertTupleEqual(mock_setdefault.call_args,
+                              (('DJANGO_SETTINGS_MODULE', test_settings), {}))
 
 
 class ManageRecipeTests(RecipeTests):
