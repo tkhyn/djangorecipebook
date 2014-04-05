@@ -2,7 +2,7 @@ import os
 import sys
 import mock
 
-from base import ScriptTests, RecipeTests, test_project, test_settings
+from base import ScriptTests, RecipeTests, test_settings
 
 from djangorecipebook.recipes import manage
 
@@ -39,21 +39,3 @@ class ManageRecipeTests(RecipeTests):
         self.assertTrue(os.path.exists(manage_script))
         self.assertIn(("djangorecipebook.recipes.manage.main('%s')" % \
                      test_settings), self.script_cat(manage_script))
-
-    @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
-                return_value=(None, []))
-    def test_create_manage_script_projectdir(self, working_set):
-        # When a project dir is specified, it should be added to sys.path
-        self.init_recipe({'project-dir': test_project})
-        self.recipe.install()
-        self.assertIn(os.path.join(self.buildout_dir, test_project),
-                      self.script_cat('manage'))
-
-    @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
-                return_value=(None, []))
-    def test_create_manage_script_with_initialization(self, working_set):
-        # When an init code is specified, it should be added to the script
-        self.init_recipe({'initialization': 'import os\nassert True'})
-        self.recipe.install()
-        self.assertIn('import os\nassert True\n\nimport djangorecipebook',
-                      self.script_cat('manage'))
