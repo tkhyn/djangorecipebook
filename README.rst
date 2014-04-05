@@ -65,3 +65,20 @@ initialization
    Don't forget that leading whitespaces are stripped.
 
    Defaults to none.
+
+
+WSGI options
+............
+
+log-file
+   The path to a log file where all stdout and/or stderr data should be
+   redirected to.
+
+   Defaults to `None`, which disables logging
+
+log-level
+   The level to log errors for. Can be one of INFO (stdout + stderr) or
+   ERROR (stderr only).
+
+   Defaults to `INFO`.
+
