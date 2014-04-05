@@ -12,7 +12,7 @@ from zc.buildout import easy_install
 class Recipe(BaseRecipe):
 
     def install(self):
-        __, working_set = self.egg.working_set()
+        __, working_set = self.egg.working_set(['djangorecipebook'])
         return easy_install.scripts(
             [(self.name, __name__, 'main')],
             working_set, sys.executable, self.bin_dir,

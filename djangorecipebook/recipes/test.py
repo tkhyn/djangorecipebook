@@ -17,7 +17,7 @@ class Recipe(BaseRecipe):
         self.apps = options.get('apps', '').split()
 
     def install(self):
-        __, working_set = self.egg.working_set()
+        __, working_set = self.egg.working_set(['djangorecipebook'])
         if self.apps:
             apps = ', %s' % ', '.join(["'%s'" % app for app in self.apps])
         else:

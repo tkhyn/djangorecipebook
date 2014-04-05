@@ -41,7 +41,7 @@ class Recipe(BaseRecipe):
             self.loglevel = None
 
     def install(self):
-        __, working_set = self.egg.working_set()
+        __, working_set = self.egg.working_set(['djangorecipebook'])
 
         _script_template = easy_install.script_template
         easy_install.script_template = \
