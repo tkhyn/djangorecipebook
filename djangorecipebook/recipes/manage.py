@@ -2,7 +2,6 @@
 Recipe generating a management script
 """
 
-import os
 import sys
 
 from base import BaseRecipe
@@ -14,7 +13,7 @@ class Recipe(BaseRecipe):
     def install(self):
         __, working_set = self.egg.working_set(['djangorecipebook'])
         return easy_install.scripts(
-            [(self.name, __name__, 'main')],
+            [(self.name, __name__.replace('recipes', 'scripts'), 'main')],
             working_set, sys.executable, self.bin_dir,
             extra_paths=self.extra_paths,
             arguments="'%s'" % self.settings,
@@ -22,10 +21,3 @@ class Recipe(BaseRecipe):
 
     def update(self):
         self.install()
-
-
-def main(settings_module):
-    # called on script execution
-    from django.core import management
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
-    management.execute_from_command_line(sys.argv)

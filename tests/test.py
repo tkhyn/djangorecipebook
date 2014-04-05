@@ -4,7 +4,8 @@ import mock
 
 from base import ScriptTests, RecipeTests, test_settings
 
-from djangorecipebook.recipes import test
+from djangorecipebook.scripts.test import main
+from djangorecipebook.recipes.test import Recipe
 
 
 class TestScriptTests(ScriptTests):
@@ -16,7 +17,7 @@ class TestScriptTests(ScriptTests):
         # script. It has all the same bells and whistles since all it
         # does is call the normal Django stuff.
         apps = ('app1', 'app2')
-        test.main(test_settings, *apps)
+        main(test_settings, *apps)
         self.assertListEqual(mock_execute.call_args[0][0],
                              ['test', 'test'] + list(apps))
         self.assertTupleEqual(mock_setdefault.call_args,
@@ -25,7 +26,7 @@ class TestScriptTests(ScriptTests):
 
 class TestRecipeTests(RecipeTests):
 
-    recipe_class = test.Recipe
+    recipe_class = Recipe
     recipe_name = 'test'
     recipe_options = {'recipe': 'djangorecipebook:test'}
 
@@ -38,8 +39,9 @@ class TestRecipeTests(RecipeTests):
         self.recipe.install()
         test_script = self.script_path('test')
         self.assertTrue(os.path.exists(test_script))
-        self.assertIn(("djangorecipebook.recipes.test.main('%s')" % \
-                     test_settings), self.script_cat(test_script))
+        self.assertIn("djangorecipebook.scripts.test.main('%s')" % \
+                        test_settings,
+                      self.script_cat(test_script))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
                 return_value=(None, []))
@@ -51,7 +53,7 @@ class TestRecipeTests(RecipeTests):
         self.init_recipe({'apps': '\n    '.join(apps)})
         self.recipe.install()
         test_script = self.script_path('test')
-        self.assertIn("djangorecipebook.recipes.test.main('%s', %s)" % \
+        self.assertIn("djangorecipebook.scripts.test.main('%s', %s)" % \
                         (test_settings,
                          ', '.join(["'%s'" % app for app in apps])),
                       self.script_cat(test_script))

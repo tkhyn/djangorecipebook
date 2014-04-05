@@ -2,7 +2,6 @@
 Recipe generating a test script
 """
 
-import os
 import sys
 
 from zc.buildout import easy_install
@@ -23,7 +22,7 @@ class Recipe(BaseRecipe):
         else:
             apps = ''
         return easy_install.scripts(
-            [(self.name, __name__, 'main')],
+            [(self.name, __name__.replace('recipes', 'scripts'), 'main')],
             working_set, sys.executable, self.bin_dir,
             extra_paths=self.extra_paths,
             arguments="'%s'%s" % (self.settings, apps),
@@ -31,10 +30,3 @@ class Recipe(BaseRecipe):
 
     def update(self):
         self.install()
-
-
-def main(settings_file, *apps):
-    from django.core import management
-    argv = ['test', 'test'] + list(apps)
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_file)
-    management.execute_from_command_line(argv)

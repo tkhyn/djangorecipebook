@@ -4,7 +4,8 @@ import mock
 
 from base import ScriptTests, RecipeTests, test_settings
 
-from djangorecipebook.recipes import manage
+from djangorecipebook.scripts.manage import main
+from djangorecipebook.recipes.manage import Recipe
 
 
 class ManageScriptTests(ScriptTests):
@@ -15,7 +16,7 @@ class ManageScriptTests(ScriptTests):
         # The manage script is a replacement for the default manage.py
         # script. It has all the same bells and whistles since all it
         # does is call the normal Django stuff.
-        manage.main(test_settings)
+        main(test_settings)
         self.assertTupleEqual(mock_execute.call_args,
                               ((sys.argv,), {}))
         self.assertTupleEqual(mock_setdefault.call_args,
@@ -24,7 +25,7 @@ class ManageScriptTests(ScriptTests):
 
 class ManageRecipeTests(RecipeTests):
 
-    recipe_class = manage.Recipe
+    recipe_class = Recipe
     recipe_name = 'manage'
     recipe_options = {'recipe': 'djangorecipebook:manage'}
 
@@ -36,6 +37,6 @@ class ManageRecipeTests(RecipeTests):
         self.recipe.install()
         manage_script = self.script_path('manage')
         self.assertTrue(os.path.exists(manage_script))
-        self.assertIn("djangorecipebook.recipes.manage.main('%s')" % \
+        self.assertIn("djangorecipebook.scripts.manage.main('%s')" % \
                         test_settings,
                       self.script_cat(manage_script))

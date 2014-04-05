@@ -1,10 +1,13 @@
 import os
+import sys
 import mock
 import logging
+import tempfile
 
 from base import ScriptTests, RecipeTests, test_settings
 
-from djangorecipebook.recipes import wsgi
+from djangorecipebook.scripts.wsgi import main
+from djangorecipebook.recipes.wsgi import Recipe
 
 
 class WSGIScriptTests(ScriptTests):
@@ -15,15 +18,18 @@ class WSGIScriptTests(ScriptTests):
         # ^^^ Our regular os.environ.setdefault patching doesn't help.
         # Patching get_wsgi_application already imports the DB layer, so the
         # settings are already needed there!
-        wsgi.main(test_settings)
+        main(test_settings)
         self.assertTrue(mock_wsgiapp.called)
 
     @mock.patch('django.core.wsgi.get_wsgi_application')
     @mock.patch('os.environ', {'DJANGO_SETTINGS_MODULE': test_settings})
     def test_logger(self, mock_wsgiapp):
-        logfile = 'wsgi.log'
+        fd, logfile = tempfile.mkstemp('.log')
+        os.close(fd)
         log_test_string = 'This is a test log'
-        wsgi.main(test_settings, logfile=logfile)
+        main(test_settings, logfile=logfile)
+
+        # test that the file has been created
         self.assertTrue(os.path.exists(logfile))
         print log_test_string
         self.assertIn(log_test_string, open(logfile, 'r').read())
@@ -31,7 +37,7 @@ class WSGIScriptTests(ScriptTests):
 
 class WSGIRecipeTests(RecipeTests):
 
-    recipe_class = wsgi.Recipe
+    recipe_class = Recipe
     recipe_name = 'wsgi'
     recipe_options = {'recipe': 'djangorecipebook:wsgi'}
 
@@ -44,7 +50,7 @@ class WSGIRecipeTests(RecipeTests):
         wsgi_script = self.script_path('wsgi')
         self.assertTrue(os.path.exists(wsgi_script))
         self.assertIn("application = " \
-                      "djangorecipebook.recipes.wsgi.main('%s')" % \
+                      "djangorecipebook.scripts.wsgi.main('%s')" % \
                       test_settings,
                       self.script_cat(wsgi_script))
 
