@@ -23,16 +23,18 @@ def main(settings_file, logfile=None, level=logging.INFO):
                 for line in data.rstrip().splitlines():
                     self.logger.log(self.log_level, line.rstrip())
 
-        logging.basicConfig(
-           level=level,
-           format='%(asctime)s:%(levelname)s:%(message)s',
-           datefmt='%Y%m%d %H:%M:%S',
-           filename=logfile,
-           filemode='a'
-        )
+        logger = logging.getLogger('wsgi_outerr_logger')
 
-        sys.stdout = StdStrLogger(logging.getLogger('stdout'), logging.INFO)
-        sys.stderr = StdStrLogger(logging.getLogger('stdout'), logging.ERROR)
+        logger.setLevel(level)
+        handler = logging.FileHandler(logfile)
+        handler.setFormatter(logging.Formatter(
+            fmt='%(asctime)s:%(levelname)s:%(message)s',
+            datefmt='%Y%m%d %H:%M:%S',)
+        )
+        logger.addHandler(handler)
+
+        sys.stdout = StdStrLogger(logger, logging.INFO)
+        sys.stderr = StdStrLogger(logger, logging.ERROR)
 
     # Run WSGI handler for the application
     from django.core.wsgi import get_wsgi_application

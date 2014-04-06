@@ -31,8 +31,21 @@ class WSGIScriptTests(ScriptTests):
 
         # test that the file has been created
         self.assertTrue(os.path.exists(logfile))
-        print log_test_string
-        self.assertIn(log_test_string, open(logfile, 'r').read())
+
+        # test that the logger does its job
+        print(log_test_string)
+        sys.stdout.write(log_test_string)
+        f = open(logfile, 'r')
+        self.assertIn(log_test_string, f.read())
+        f.close()
+
+        # close handler and remove temporary log file
+        logger = logging.getLogger('wsgi_outerr_logger')
+        handler = logger.handlers[0]
+        logger.removeHandler(handler)
+        handler.flush()
+        handler.close()
+        os.remove(logfile)
 
 
 class WSGIRecipeTests(RecipeTests):
