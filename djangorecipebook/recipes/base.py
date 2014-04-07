@@ -12,25 +12,26 @@ class BaseRecipe(object):
 
         # recipe book's egg
         self.egg = Egg(buildout, options['recipe'].split(':')[0], options)
-        self.name = name
-        self.buildout = buildout
 
-        root_dir = self.buildout['buildout']['directory']
+        self.buildout, self.name, self.options = buildout, name, options
+
+        options['root_dir'] = self.buildout['buildout']['directory']
 
         # extraction of buildout parameters
-        self.bin_dir = self.buildout['buildout']['bin-directory']
+        options['bin_dir'] = self.buildout['buildout']['bin-directory']
 
         # extraction of common options
         proj_dir = options.get('project-dir', '.')
-        self.proj_dir = os.path.normpath(os.path.join(root_dir, proj_dir))
-        self.settings = options.get('settings', 'settings')
-        self.init = options.get('initialization', '')
+        options['proj_dir'] = os.path.normpath(
+            os.path.join(options['root_dir'], proj_dir))
+        options.setdefault('settings', 'settings')
+        options.setdefault('initialization', '')
 
-        extra_paths = [root_dir]
+        extra_paths = [options['root_dir']]
         if proj_dir != '.':
-            extra_paths.append(self.proj_dir)
+            extra_paths.append(self.options['proj_dir'])
         for path in options.get('extra-paths', '').splitlines():
             path = path.strip()
             if path:
                 extra_paths.append(os.path.normpath(path))
-        self.extra_paths = extra_paths
+        options['extra-paths'] = ';'.join(extra_paths)

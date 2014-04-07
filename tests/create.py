@@ -14,6 +14,11 @@ class CreateRecipeTests(RecipeTests):
     recipe_name = 'create'
     recipe_options = {'recipe': 'djangorecipebook:create'}
 
+    def test_consistent_options(self):
+        options_1 = self.recipe.options
+        self.init_recipe()
+        self.assertEqual(options_1, self.recipe.options)
+
     def test_random_secret(self):
         secrets = []
         for i in range(10):
@@ -53,7 +58,7 @@ class CreateRecipeTests(RecipeTests):
         module.close()
 
         # fake initialisation of installation
-        self.recipe.context._created = []
+        self.recipe.options._created = []
         self.recipe.install()
 
         # check files existence

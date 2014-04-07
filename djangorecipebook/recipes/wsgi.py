@@ -29,15 +29,13 @@ class Recipe(BaseRecipe):
 
     def __init__(self, buildout, name, options):
         super(Recipe, self).__init__(buildout, name, options)
-        self.logfile = options.get('log-file', None)
+        options.setdefault('log-file', '')
 
-        if self.logfile:
+        if options['log-file']:
             loglevel = options.get('log-level', 'INFO')
             if loglevel not in ('INFO', 'ERROR'):
                 raise ValueError('log-level should be INFO or ERROR')
-            self.loglevel = getattr(logging, loglevel)
-        else:
-            self.loglevel = None
+            options['log-level'] = str(getattr(logging, loglevel))
 
     def install(self):
         __, working_set = self.egg.working_set(['djangorecipebook'])
@@ -46,15 +44,19 @@ class Recipe(BaseRecipe):
         easy_install.script_template = \
             easy_install.script_header + wsgi_template
 
-        logfile = (", logfile='%s'" % self.logfile) if self.logfile else ''
-        loglevel = (", level=%d" % self.loglevel) if self.loglevel else ''
+        if self.options['log-file']:
+            logfile = (", logfile='%s'" % self.options['log-file'])
+            loglevel = (", level=%s" % self.options['log-level'])
+        else:
+            logfile = loglevel = ''
 
         script = easy_install.scripts(
             [(self.name, __name__.replace('recipes', 'scripts'), 'main')],
-            working_set, sys.executable, self.bin_dir,
-            extra_paths=self.extra_paths,
-            arguments="'%s'%s%s" % (self.settings, logfile, loglevel),
-            initialization=self.init)
+            working_set, sys.executable, self.options['bin_dir'],
+            extra_paths=self.options['extra-paths'].split(';'),
+            arguments="'%s'%s%s" % (self.options['settings'],
+                                    logfile, loglevel),
+            initialization=self.options['initialization'])
 
         easy_install.script_template = _script_template
 

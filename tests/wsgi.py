@@ -54,6 +54,11 @@ class WSGIRecipeTests(RecipeTests):
     recipe_name = 'wsgi'
     recipe_options = {'recipe': 'djangorecipebook:wsgi'}
 
+    def test_consistent_options(self):
+        options_1 = self.recipe.options
+        self.init_recipe()
+        self.assertEqual(options_1, self.recipe.options)
+
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
                 return_value=(None, []))
     def test_make_wsgi_script_default(self, working_set):

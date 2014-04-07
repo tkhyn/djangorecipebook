@@ -29,6 +29,11 @@ class ManageRecipeTests(RecipeTests):
     recipe_name = 'manage'
     recipe_options = {'recipe': 'djangorecipebook:manage'}
 
+    def test_consistent_options(self):
+        options_1 = self.recipe.options
+        self.init_recipe()
+        self.assertEqual(options_1, self.recipe.options)
+
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
                 return_value=(None, []))
     def test_install(self, working_set):
