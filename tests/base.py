@@ -12,6 +12,8 @@ import tempfile
 import unittest
 import mock
 
+from zc.buildout.testing import TestOptions
+
 
 test_project = 'project'
 test_settings = 'settings'
@@ -55,21 +57,24 @@ class RecipeTests(unittest.TestCase):
         self.init_recipe()
 
     def init_recipe(self, options={}, name=None):
-        self.recipe = self.recipe_class(
-            {'buildout': {
-                'eggs-directory': self.eggs_dir,
-                'develop-eggs-directory': self.develop_eggs_dir,
-                'bin-directory': self.bin_dir,
-                'parts-directory': self.parts_dir,
-                'directory': self.buildout_dir,
-                'python': 'buildout',
-                'executable': sys.executable,
-                'find-links': '',
-                'allow-hosts': ''},
-             },
-             name or self.recipe_name,
-             dict(self.recipe_options, **options)
-        )
+
+        buildout_obj = {'buildout': {
+            'eggs-directory': self.eggs_dir,
+            'develop-eggs-directory': self.develop_eggs_dir,
+            'bin-directory': self.bin_dir,
+            'parts-directory': self.parts_dir,
+            'directory': self.buildout_dir,
+            'allow-hosts': '',  # don't visit any URL
+            'find-links': '',
+            'python': 'buildout',
+            'executable': sys.executable,
+        }}
+
+        name = name or self.recipe_name
+        options_obj = TestOptions(buildout_obj, name,
+                                  dict(self.recipe_options, **options))
+
+        self.recipe = self.recipe_class(buildout_obj, name, options_obj)
 
     def tearDown(self):
         # Remove our test dir
