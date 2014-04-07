@@ -62,11 +62,6 @@ extra-paths
 
    Defaults to `[]`.
 
-script-name
-   The name of the script that should be generated.
-
-   Defaults to the part name.
-
 initialization
    Some (basic) python initialization code to insert in the generated script.
    Don't forget that leading whitespaces are stripped.
@@ -104,7 +99,7 @@ Create options
 
 In create mode, the following common options are unused:
 
-- script-name
+- extra-paths
 - initialization
 
 The settings import path must be set as it is used to determine whether the
