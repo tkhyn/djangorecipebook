@@ -60,8 +60,10 @@ def process_tree(directory, mapping):
     """
     Performs all templating operations on the directory and its children
     """
+    directory = replace_name(directory, mapping)
     for dirpath, dirnames, filenames in os.walk(directory):
         for f in filenames:
             process(os.path.join(dirpath, f), mapping)
         for d in dirnames:
-            replace_name(os.path.join(dirpath, d), mapping)
+            dirnames.remove(d)
+            dirnames.append(replace_name(os.path.join(dirpath, d), mapping))

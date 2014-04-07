@@ -45,7 +45,8 @@ class CreateRecipeTests(RecipeTests):
         temp_dir = tempfile.mkdtemp('templates')
         self.init_recipe({'template': 'template',
                           'template-dirs': temp_dir,
-                          'author': 'Thomas Khyn'})
+                          'author': 'Thomas Khyn',
+                          'app1': 'myapp'})
 
         temp_path = os.path.join(temp_dir, 'template')
         os.mkdir(temp_path)
@@ -53,17 +54,30 @@ class CreateRecipeTests(RecipeTests):
         lic.write('(c) ${year} ${author}')
         lic.close()
 
-        module = open(os.path.join(temp_path, '${project_name}.py'), 'w')
-        module.write("AUTHOR = '${author}'")
-        module.close()
+        pkg = '${project_name}'
+        os.mkdir(os.path.join(temp_path, pkg))
+
+        init = open(os.path.join(temp_path, pkg, '__init__.py'), 'w')
+        init.write("AUTHOR = '${author}'")
+        init.close()
+
+        app = '${app1}'
+        os.mkdir(os.path.join(temp_path, pkg, app))
+        init = open(os.path.join(temp_path, pkg, app, '__init__.py'), 'w')
+        init.close()
 
         # fake initialisation of installation
         self.recipe.options._created = []
         self.recipe.install()
 
         # check files existence
-        expected_files = ('LICENSE.txt', 'create.py')
-        self.assertTrue(set(expected_files).issubset(os.listdir(project_dir)))
+        expected = ('LICENSE.txt', 'create')
+        self.assertTrue(set(expected).issubset(os.listdir(project_dir)))
+        self.assertTrue(os.path.isdir(os.path.join(project_dir, 'create')))
+        self.assertTrue(os.path.isfile(os.path.join(project_dir, 'create',
+                                                    '__init__.py')))
+        self.assertTrue(os.path.isdir(os.path.join(project_dir, 'create',
+                                                   'myapp')))
 
         # check files content
         year = date.today().year
@@ -71,7 +85,7 @@ class CreateRecipeTests(RecipeTests):
         self.assertEqual(lic.read(), '(c) %s Thomas Khyn' % year)
         lic.close()
 
-        module = open(os.path.join(project_dir, 'create.py'), 'r')
+        module = open(os.path.join(project_dir, 'create', '__init__.py'), 'r')
         self.assertEqual(module.read(), "AUTHOR = 'Thomas Khyn'")
         module.close()
 
