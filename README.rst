@@ -25,6 +25,9 @@ djangorecipebook:manage
 djangorecipebook:wsgi
    Creates a wsgi script for the project
 
+djangorecipebook:fcgi
+   Creates a fcgi script for the project
+
 djangorecipebook:test
    Creates a script that invokes ``manage.py test [apps]``
 
@@ -63,8 +66,8 @@ initialization
    Defaults to ``''``.
 
 
-WSGI options
-............
+WSGI and FCGI options
+.....................
 
 log-file
    The path to a log file where all stdout and/or stderr data should be
@@ -79,7 +82,7 @@ log-level
    Defaults to ``INFO``.
 
 virtualenv
-   The virtualenv that should be used to run the wsgi application. This
+   The virtualenv that should be used to run the wsgi/fcgi script. This
    requires virtualenv **and** virtualenvwrapper, as it relies upon the
    ``WORKON_HOME`` environment variable.
 

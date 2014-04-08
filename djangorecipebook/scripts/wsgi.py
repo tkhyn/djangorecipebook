@@ -9,8 +9,7 @@ import sys
 import logging
 
 
-def main(settings_file, logfile=None, level=logging.INFO):
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_file)
+def setup_logging(logfile, level, logger_name):
 
     if logfile:
         # setup logging
@@ -23,7 +22,7 @@ def main(settings_file, logfile=None, level=logging.INFO):
                 for line in data.rstrip().splitlines():
                     self.logger.log(self.log_level, line.rstrip())
 
-        logger = logging.getLogger('wsgi_outerr_logger')
+        logger = logging.getLogger(logger_name)
 
         logger.setLevel(level)
         handler = logging.FileHandler(logfile)
@@ -35,6 +34,12 @@ def main(settings_file, logfile=None, level=logging.INFO):
 
         sys.stdout = StdStrLogger(logger, logging.INFO)
         sys.stderr = StdStrLogger(logger, logging.ERROR)
+
+
+def main(settings_file, logfile=None, level=logging.INFO):
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_file)
+
+    setup_logging(logfile, level, 'wsgi_outerr_logger')
 
     # Run WSGI handler for the application
     from django.core.wsgi import get_wsgi_application

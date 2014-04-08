@@ -52,6 +52,7 @@ setup(
     entry_points={'zc.buildout': ['default = %s.recipes.manage:Recipe' % name,
                                   'manage = %s.recipes.manage:Recipe' % name,
                                   'wsgi = %s.recipes.wsgi:Recipe' % name,
+                                  'fcgi = %s.recipes.fcgi:Recipe' % name,
                                   'test = %s.recipes.test:Recipe' % name,
                                   'create = %s.recipes.create:Recipe' % name, ]
     },

@@ -1,5 +1,5 @@
 """
-Recipe generating a wsgi script
+Base recipe for production scripts generation
 """
 
 import os
