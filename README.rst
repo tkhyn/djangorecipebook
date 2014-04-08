@@ -1,7 +1,7 @@
 djangorecipebook
 ================
 
-(c) 2014 Thomas Khyn
+|copyright| 2014 Thomas Khyn
 
 Buildout recipes for django development
 
@@ -15,26 +15,20 @@ all scripts in one part, djangorecipebook enables you to define one part per
 script (create, manage, wsgi, test), hence allowing the use of different
 settings and/or eggs for each part.
 
-.. _djangorecipe: https://github.com/rvanlaar/djangorecipe
-
 
 Available recipes
 -----------------
 
 djangorecipebook:manage
-
    Creates a management script for the project
 
 djangorecipebook:wsgi
-
    Creates a wsgi script for the project
 
 djangorecipebook:test
-
    Creates a script that invokes ``manage.py test [apps]``
 
 djangorecipebook:create
-
    Creates a django project from on a user-defined template or using django's
    ``startproject`` management command. This recipe will not generate any script.
    The name of the created project is the name of the section.
@@ -201,3 +195,7 @@ which will produce to the following output in the final file (if we are in
 
 or, if you have a directory named ``${project_name}_parameters``, the final name
 will be ``mynewproject_parameters``.
+
+
+.. |copyright| unicode:: 0xA9
+.. _djangorecipe: https://github.com/rvanlaar/djangorecipe
