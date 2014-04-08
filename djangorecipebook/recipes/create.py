@@ -99,9 +99,9 @@ class Recipe(BaseRecipe):
                 src_path = os.path.join(temp_path, sub)
                 tgt_path = os.path.join(self.options['proj_dir'], sub)
                 if os.path.exists(tgt_path):
-                    sys.stderr.write('ERROR: %s already exists in %s and ' \
-                        'cannot be overwritten by djangorecipe\'s template ' \
-                        'engine.\n' % (sub, self.options['proj_dir']))
+                    sys.stderr.write('ERROR: %s already exists in %s and '
+                        'cannot be overwritten by djangorecipebook\'s '
+                        'template engine.\n' % (sub, self.options['proj_dir']))
                 else:
                     if os.path.isdir(src_path):
                         # copy the subdirectory tree
