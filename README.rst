@@ -9,11 +9,11 @@ Buildout recipes for django development
 About
 -----
 
-The recipes provided in djangorecipebook are mostly derived from
+The recipes available in djangorecipebook are mostly derived from
 djangorecipe_'s functionalities. However, while djangorecipe aims at generating
-all scripts in one part (and therefore one settings module), djangorecipebook
-enables you to define one part per script (create, manage, wsgi, test), hence
-allowing the use of different settings and eggs for each part.
+all scripts in one part, djangorecipebook enables you to define one part per
+script (create, manage, wsgi, test), hence allowing the use of different
+settings and/or eggs for each part.
 
 .. _djangorecipe: https://github.com/rvanlaar/djangorecipe
 
@@ -190,12 +190,12 @@ For example, if you have in buildout.cfg::
     template = mytemplate
     author = Thomas Khyn
 
- for a copyright notice in a module docstring, you may use::
+for a copyright notice in a module docstring, you may use::
 
     (c) ${year} ${author}
 
- which will produce to the following output in the final file (if we are in
- 2014)::
+which will produce to the following output in the final file (if we are in
+2014)::
 
     (c) 2014 Thomas Khyn
 
