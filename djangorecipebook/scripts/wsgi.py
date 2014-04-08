@@ -2,7 +2,7 @@
 Recipe generating a wsgi script
 """
 
-# largely derived from R van Laar's djangorecipe
+# derived from R van Laar's djangorecipe
 
 import os
 import sys

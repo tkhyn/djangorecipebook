@@ -60,6 +60,6 @@ setup(
         'zc.recipe.egg',
         'django',
     ),
-    extras_require={'tests': ('coverage', 'mock')},
+    extras_require={'tests': ('coverage', 'mock', 'testfixtures')},
     zip_safe=False,
 )

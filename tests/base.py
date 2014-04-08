@@ -1,4 +1,4 @@
-# Most of the djangorecipebook's tests were taken from djangorecipe,
+# The basic djangorecipebook tests were taken from djangorecipe,
 # (c) Roland van Laar, BSD license, [https://github.com/rvanlaar/djangorecipe]
 # and were simply adapted to the needs of djangorecipebook
 

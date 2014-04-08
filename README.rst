@@ -78,6 +78,13 @@ log-level
 
    Defaults to ``INFO``.
 
+virtualenv
+   The virtualenv that should be used to run the wsgi application. This
+   requires virtualenv **and** virtualenvwrapper, as it relies upon the
+   ``WORKON_HOME`` environment variable.
+
+   Defaults to ``''``, which disables any virtual environment setup.
+
 Test options
 ............
 
