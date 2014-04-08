@@ -32,7 +32,7 @@ djangorecipebook:test
    Creates a script that invokes ``manage.py test [apps]``
 
 djangorecipebook:create
-   Creates a django project from on a user-defined template or using django's
+   Creates a django project from a user-defined template or using django's
    ``startproject`` management command. This recipe will not generate any script.
    The name of the created project is the name of the section.
 

@@ -6,7 +6,6 @@ from prod import ProdRecipe
 
 
 wsgi_template = """
-
 %(relative_paths_setup)s
 import sys
 sys.path[0:0] = [
