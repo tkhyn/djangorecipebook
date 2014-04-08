@@ -31,7 +31,7 @@ setup(
     long_description=open(os.path.join('README.rst')).read(),
     author='Thomas Khyn',
     author_email='thomas@ksytek.com',
-    url='http://open.ksytek.com/djangorecipebook/',  # TODO: check url
+    url='http://bitbucket.org/tkhyn/djangorecipebook/',
     keywords=['django', 'buildout', 'recipe'],
     classifiers=[
         'Programming Language :: Python',
