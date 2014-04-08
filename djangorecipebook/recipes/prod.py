@@ -36,10 +36,10 @@ class ProdRecipe(BaseRecipe):
         __, working_set = self.egg.working_set(['djangorecipebook'])
 
         venv = self.options['virtualenv']
-        workon_home = os.environ.get('WORKON_HOME', '')
         venv_path = ''
 
         if venv:
+            workon_home = os.environ.get('WORKON_HOME', '')
             if workon_home:
                 envs = os.listdir(workon_home)
                 if venv in envs:
@@ -66,7 +66,10 @@ class ProdRecipe(BaseRecipe):
         _script_template = easy_install.script_template
         easy_install.script_template = easy_install.script_header + \
             ((venv_setup % venv_path) if venv_path else '') + \
-            self.script_template if self.script_template else _script_template
+            (self.script_template if self.script_template
+                else _script_template.split('\n', 1)[1])
+            # we use split to strip the 1st line of _script_template, which
+            # is the header
 
         if self.options['log-file']:
             logfile = (", logfile='%s'" % self.options['log-file'])
