@@ -11,16 +11,13 @@ from djangorecipebook.recipes.manage import Recipe
 class ManageScriptTests(ScriptTests):
 
     @mock.patch('django.core.management.execute_from_command_line')
-    @mock.patch('os.environ.setdefault')
-    def test_script(self, mock_setdefault, mock_execute):
+    def test_script(self, mock_execute):
         # The manage script is a replacement for the default manage.py
         # script. It has all the same bells and whistles since all it
         # does is call the normal Django stuff.
         main(test_settings)
-        self.assertTupleEqual(mock_execute.call_args,
-                              ((sys.argv,), {}))
-        self.assertTupleEqual(mock_setdefault.call_args,
-                              (('DJANGO_SETTINGS_MODULE', test_settings), {}))
+        self.assertListEqual(mock_execute.call_args[0][0],
+                             sys.argv + ['--settings=%s' % test_settings])
 
 
 class ManageRecipeTests(RecipeTests):
