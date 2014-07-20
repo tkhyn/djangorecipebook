@@ -1,4 +1,4 @@
-__version_info__ = (0, 2, 1, 'beta', 3)
+__version_info__ = (0, 2, 1, 'final', 0)
 
 import subprocess
 

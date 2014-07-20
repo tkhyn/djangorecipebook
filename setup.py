@@ -19,7 +19,7 @@ if dev_status == 'alpha' and not __version_info__[4]:
 DEV_STATUS = {'pre': '2 - Pre-Alpha',
               'alpha': '3 - Alpha',
               'beta': '4 - Beta',
-              'rc': '5 - Production/Stable',
+              'rc': '4 - Beta',
               'final': '5 - Production/Stable'}
 
 # setup function parameters
@@ -31,7 +31,7 @@ setup(
     long_description=open(os.path.join('README.rst')).read(),
     author='Thomas Khyn',
     author_email='thomas@ksytek.com',
-    url='http://bitbucket.org/tkhyn/djangorecipebook/',
+    url='https://bitbucket.org/tkhyn/djangorecipebook/',
     keywords=['django', 'buildout', 'recipe'],
     classifiers=[
         'Programming Language :: Python',
@@ -39,7 +39,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Development Status :: %s' % DEV_STATUS[dev_status],
-        'Intended Audience :: ',
+        'Intended Audience :: Developers',
         'Framework :: Buildout :: Recipe',
         'Framework :: Django',
         'Topic :: Software Development :: Build Tools',

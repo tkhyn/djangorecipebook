@@ -1,6 +1,7 @@
 syntax: glob
 
 # distutils generated files and folders
+build
 dist
 MANIFEST
 
