@@ -15,6 +15,9 @@ all scripts in one part, djangorecipebook enables you to define one part per
 script (create, manage, wsgi, test), hence allowing the use of different
 settings and/or eggs for each part.
 
+djangorecipebook works with django 1.4 to 1.7 and relevant python versions
+(2.6 to 3.4, depending on django version).
+
 
 Available recipes
 -----------------
