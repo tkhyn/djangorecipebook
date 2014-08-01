@@ -3,7 +3,7 @@ import tempfile
 import shutil
 from datetime import date
 
-from base import RecipeTests
+from .base import RecipeTests
 
 from djangorecipebook.recipes.create import Recipe
 

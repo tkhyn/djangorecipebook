@@ -10,7 +10,7 @@ import tempfile
 from random import choice
 from datetime import date
 
-from base import BaseRecipe
+from .base import BaseRecipe
 
 from djangorecipebook import templating
 

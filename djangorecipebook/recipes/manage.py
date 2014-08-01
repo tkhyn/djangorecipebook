@@ -4,7 +4,7 @@ Recipe generating a management script
 
 import sys
 
-from base import BaseRecipe
+from .base import BaseRecipe
 from zc.buildout import easy_install
 
 

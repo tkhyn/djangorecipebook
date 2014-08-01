@@ -6,7 +6,7 @@ import os
 import sys
 import logging
 
-from base import BaseRecipe
+from .base import BaseRecipe
 from zc.buildout import easy_install
 
 

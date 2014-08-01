@@ -2,7 +2,7 @@
 Recipe generating a fcgi script
 """
 
-from prod import ProdRecipe
+from .prod import ProdRecipe
 
 
 class Recipe(ProdRecipe):

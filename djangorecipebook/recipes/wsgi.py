@@ -2,7 +2,7 @@
 Recipe generating a wsgi script
 """
 
-from prod import ProdRecipe
+from .prod import ProdRecipe
 
 
 wsgi_template = """

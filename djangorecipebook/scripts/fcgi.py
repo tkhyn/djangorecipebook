@@ -5,7 +5,7 @@ Recipe generating a wsgi script
 import os
 import logging
 
-from wsgi import setup_logging
+from .wsgi import setup_logging
 
 
 def main(settings_file, logfile=None, level=logging.INFO):

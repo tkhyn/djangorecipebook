@@ -7,7 +7,7 @@ import shutil
 
 from testfixtures import log_capture
 
-from base import ScriptTests, RecipeTests, test_settings
+from .base import ScriptTests, RecipeTests, test_settings
 
 from djangorecipebook.scripts.wsgi import main
 from djangorecipebook.recipes.wsgi import Recipe

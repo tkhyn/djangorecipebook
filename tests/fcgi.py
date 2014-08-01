@@ -2,15 +2,9 @@
 # production scripts generation is tested with WSGI
 
 import os
-import sys
 import mock
-import logging
-import tempfile
-import shutil
 
-from testfixtures import log_capture
-
-from base import ScriptTests, RecipeTests, test_settings
+from .base import ScriptTests, RecipeTests, test_settings
 
 from djangorecipebook.scripts.fcgi import  main
 from djangorecipebook.recipes.fcgi import Recipe

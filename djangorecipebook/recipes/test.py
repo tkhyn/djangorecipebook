@@ -6,7 +6,7 @@ import sys
 
 from zc.buildout import easy_install
 
-from base import BaseRecipe
+from .base import BaseRecipe
 
 
 class Recipe(BaseRecipe):
