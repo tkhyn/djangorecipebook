@@ -13,10 +13,8 @@ djangorecipebook.egg-info
 # coverage
 tests/.coverage
 
-# eclipse project related files and folders
-.pydevproject
-.project
-.settings
+# tox
+.tox
 
 # python binary files
 *.pyc
