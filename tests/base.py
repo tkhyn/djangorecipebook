@@ -9,8 +9,12 @@ import sys
 import os
 import shutil
 import tempfile
-import unittest
 import mock
+
+try:
+    import unittest2 as unittest  # for python 2.6
+except ImportError:
+    import unittest
 
 from zc.buildout.testing import TestOptions
 

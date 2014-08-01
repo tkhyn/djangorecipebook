@@ -35,6 +35,7 @@ setup(
     keywords=['django', 'buildout', 'recipe'],
     classifiers=[
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
