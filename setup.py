@@ -61,7 +61,7 @@ setup(
     install_requires=(
         'zc.buildout',
         'zc.recipe.egg',
-        'django',
+        'django>=1.4',
     ),
     extras_require={'tests': ('coverage', 'mock', 'testfixtures')},
     zip_safe=False,
