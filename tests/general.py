@@ -3,6 +3,7 @@ General tests that concern all recipes
 """
 
 import os
+import sys
 import mock
 
 from .base import RecipeTests, test_project
@@ -23,7 +24,10 @@ class GeneralRecipeTests(RecipeTests):
         # When a project dir is specified, it should be added to sys.path
         self.init_recipe({'project-dir': test_project})
         self.recipe.install()
-        self.assertIn(os.path.join(self.buildout_dir, test_project),
+        to_find_in = os.path.join(self.buildout_dir, test_project)
+        if sys.platform == 'win32' and sys.version_info >= (3, 4):
+            to_find_in = to_find_in.lower()
+        self.assertIn(to_find_in,
                       self.script_cat('manage'))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
