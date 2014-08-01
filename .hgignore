@@ -6,7 +6,7 @@ dist
 MANIFEST
 
 # buildout files and folders
-buildout
+bin
 .installed.cfg
 djangorecipebook.egg-info
 
