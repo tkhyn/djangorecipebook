@@ -156,7 +156,7 @@ being used.
 
 For example, if in ~/.buildout/default.cfg you have the following lines::
 
-    [djangorecipebooks]
+    [djangorecipebook]
     template-dirs =
       /my/project/template/directory
       /my/project/template/directory2
