@@ -66,7 +66,7 @@ class CreateRecipeTests(RecipeTests):
         init = open(os.path.join(temp_path, pkg, app, '__init__.py'), 'w')
         init.close()
 
-        # fake initialisation of installation
+        # fake initialization of installation
         self.recipe.options._created = []
         self.recipe.install()
 

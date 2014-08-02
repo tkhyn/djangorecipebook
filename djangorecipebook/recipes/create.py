@@ -1,5 +1,5 @@
 """
-Django project initialisation recipe
+Django project initialization recipe
 """
 
 import os

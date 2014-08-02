@@ -140,7 +140,7 @@ Templates
 ---------
 
 In create mode, a templating engine is available for greater personalisation
-of your django project initialisation.
+of your django project initialization.
 
 Templates discovery
 ...................
