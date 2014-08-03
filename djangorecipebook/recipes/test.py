@@ -4,12 +4,11 @@ Recipe generating a test script
 
 import sys
 
+from .manage import Recipe as ManageRecipe
 from zc.buildout import easy_install
 
-from .base import BaseRecipe
 
-
-class Recipe(BaseRecipe):
+class Recipe(ManageRecipe):
 
     def __init__(self, buildout, name, options):
         super(Recipe, self).__init__(buildout, name, options)

@@ -2,17 +2,8 @@
 Recipe generating a test script
 """
 
-import sys
+from .manage import manage_main
 
 
-def main(settings_module, *apps):
-    from django.core import management
-    settings = []
-    for arg in sys.argv:
-        if arg.startswith('--settings='):
-            break
-    else:
-        settings = ['--settings=%s' % settings_module]
-    management.execute_from_command_line(['manage.py', 'test'] + \
-                                         sys.argv[1:] + settings + \
-                                         list(apps))
+def main(settings_module, *args):
+    manage_main(settings_module, 'test', *args)

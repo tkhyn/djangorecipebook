@@ -2,7 +2,7 @@
 Recipe generating a wsgi script
 """
 
-from .prod import ProdRecipe
+from .fcgi import Recipe as FcgiRecipe
 
 
 wsgi_template = """
@@ -18,10 +18,5 @@ application = %(module_name)s.%(attrs)s(%(arguments)s)
 """
 
 
-class Recipe(ProdRecipe):
-
+class Recipe(FcgiRecipe):
     script_template = wsgi_template
-
-    def install(self):
-        return super(Recipe, self). \
-            install(__name__.replace('recipes', 'scripts'))

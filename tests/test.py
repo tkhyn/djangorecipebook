@@ -10,6 +10,7 @@ from djangorecipebook.recipes.test import Recipe
 
 class TestScriptTests(ScriptTests):
 
+    @mock.patch('sys.argv', ['test'])
     @mock.patch('django.core.management.execute_from_command_line')
     def test_script(self, mock_execute):
         # The manage script is a replacement for the default manage.py
