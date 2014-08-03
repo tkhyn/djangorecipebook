@@ -1,6 +1,15 @@
 Changes
 =======
 
+1.1 (2014-08-03)
+----------------
+
+- Added ``nose`` and ``workingdir`` options to ``test`` recipe, to install
+  and run with django_nose_ and select the base directory for the test modules
+- Added ``args`` option to ``manage`` and ``test`` recipes to provide
+  supplementary command line arguments
+- Added ``envvar`` option to all recipes to set environment variables
+
 1.0 (2014-08-02)
 ----------------
 
@@ -32,3 +41,6 @@ Changes
 ----------------
 
 - Birth
+
+
+.. _django_nose: https://pypi.python.org/pypi/django-nose
