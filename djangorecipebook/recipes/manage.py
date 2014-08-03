@@ -18,7 +18,7 @@ class Recipe(BaseRecipe):
             working_set, sys.executable, self.options['bin_dir'],
             extra_paths=self.options['extra-paths'].split(';'),
             arguments="'%s'" % self.options['settings'],
-            initialization=self.options['initialization'])
+            initialization=self._initialization())
 
     def update(self):
         self.install()

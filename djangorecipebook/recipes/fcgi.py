@@ -84,7 +84,7 @@ class Recipe(BaseRecipe):
             extra_paths=self.options['extra-paths'].split(';'),
             arguments="'%s'%s%s" % (self.options['settings'],
                                     logfile, loglevel),
-            initialization=self.options['initialization'])
+            initialization=self._initialization())
 
         easy_install.script_template = _script_template
 

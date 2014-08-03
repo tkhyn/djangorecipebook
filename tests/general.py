@@ -51,3 +51,13 @@ class GeneralRecipeTests(RecipeTests):
         self.recipe.install()
         self.assertIn('import os\nassert True\n\nimport djangorecipebook',
                       self.script_cat('manage'))
+
+    @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
+                return_value=(None, []))
+    def test_create_manage_script_with_envvars(self, working_set):
+        # Install of a test script with custom environment variables
+        self.init_recipe({'envvars': 'MYENVVAR = value'})
+        self.recipe.install()
+        manage_script = self.script_cat('manage')
+        self.assertIn('import os', manage_script)
+        self.assertIn("os.environ['MYENVVAR'] = 'value'", manage_script)

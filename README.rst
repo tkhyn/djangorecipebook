@@ -62,6 +62,12 @@ extra-paths
 
    Defaults to ``[]``.
 
+envvars
+   Any environment variable that need to be set for the test run, one per line,
+   under the form ``VARIABLE = value`` (spaces are tolerated).
+
+   Defaults to no environment variable set.
+
 initialization
    Some (basic) python initialization code to insert in the generated script.
    Don't forget that leading whitespaces are stripped.

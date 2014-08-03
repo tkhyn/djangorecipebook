@@ -3,6 +3,8 @@ Defines the base recipe for all recipes of the recipe book
 """
 
 import os
+import re
+
 from zc.recipe.egg import Egg
 
 
@@ -35,3 +37,22 @@ class BaseRecipe(object):
             if path:
                 extra_paths.append(os.path.normpath(path))
         options['extra-paths'] = ';'.join(extra_paths)
+
+        options.setdefault('envvars', '')
+
+    def _initialization(self):
+        init = self.options['initialization']
+        if self.options['envvars']:
+            for kv in self.options['envvars'].splitlines():
+                kv = kv.strip()
+                try:
+                    init += "\nos.environ['%s'] = '%s'" % \
+                            tuple(re.split('\s*=\s*', kv))
+                except TypeError:
+                    raise ValueError('Invalid environment variable '
+                                     'statement: "%s"' % kv)
+
+        if init and not 'import os' in init:
+            init = 'import os\n' + init
+
+        return init
