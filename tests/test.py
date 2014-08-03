@@ -61,3 +61,15 @@ class TestRecipeTests(RecipeTests):
                         (test_settings,
                          ', '.join(["'%s'" % app for app in apps])),
                       self.script_cat(test_script))
+
+    @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
+                return_value=(None, []))
+    def test_install_workingdir(self, working_set):
+        # Install of a test script with a working directory
+        self.init_recipe({'workingdir': 'tests'})
+        self.recipe.install()
+        test_script = self.script_path('test')
+        self.assertIn("import os\n"
+                      "os.chdir('tests')\n"
+                      "sys.path.append(os.getcwd())",
+                      self.script_cat(test_script))
