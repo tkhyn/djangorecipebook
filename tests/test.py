@@ -19,8 +19,8 @@ class TestScriptTests(ScriptTests):
         apps = ('app1', 'app2')
         main(test_settings, *apps)
         self.assertListEqual(mock_execute.call_args[0][0],
-                             ['manage.py', 'test'] + sys.argv[1:] + \
-                             ['--settings=%s' % test_settings] + list(apps))
+                             ['manage.py', 'test',
+                              '--settings=%s' % test_settings] + list(apps))
 
 
 class TestRecipeTests(RecipeTests):

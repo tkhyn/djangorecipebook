@@ -19,8 +19,11 @@ def manage_main(settings_module, command, *args):
     else:
         command = []
 
-    management.execute_from_command_line(['manage.py'] + command + settings +
-                                         list(args) + sys.argv[1:])
+    # the arguments need to be inserted in sys.argv as subsequent packages
+    # (e.g. nose) fetch them directly from it and would ignore
+    sys.argv[1:1] = args
+    management.execute_from_command_line(['manage.py'] + command +
+                                         settings + sys.argv[1:])
 
 
 def main(settings_module, *args):
