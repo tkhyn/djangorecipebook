@@ -75,6 +75,16 @@ initialization
    Defaults to ``''``.
 
 
+Manage options
+..............
+
+args
+   Any command-line argument you wish to have added to the generated script,
+   separated by spaces or line-breaks.
+
+   Defaults to no arguments.
+
+
 WSGI and FCGI options
 .....................
 
@@ -97,15 +107,18 @@ virtualenv
 
    Defaults to ``''``, which disables any virtual environment setup.
 
+
 Test options
 ............
 
+args
+   See `Manage options`_.
+
 apps
    The names of the apps that should be tested, separated by spaces or
-   line-breaks. If it is empty, tests will run for all the apps in
-   ``INSTALLED_APPS``.
+   line-breaks.
 
-   Defaults to ``''`` (all apps)
+   Defaults to all the apps defined in ``INSTALLED_APPS``
 
 Create options
 ..............

@@ -54,6 +54,20 @@ class GeneralRecipeTests(RecipeTests):
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
                 return_value=(None, []))
+    def test_create_manage_script_with_args(self, working_set):
+        # Default install of a test script, check that the call to
+        # djangorecipebook.test.main is present and has the apps names in the
+        # arguments
+        args = ('-v', '--no-input')
+        self.init_recipe({'args': '\n    '.join(args)})
+        self.recipe.install()
+        manage_script = self.script_path('manage')
+        self.assertIn("djangorecipebook.scripts.manage.main('settings', %s)"
+                      % ', '.join(["'%s'" % arg for arg in args]),
+                      self.script_cat(manage_script))
+
+    @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
+                return_value=(None, []))
     def test_create_manage_script_with_envvars(self, working_set):
         # Install of a test script with custom environment variables
         self.init_recipe({'envvars': 'MYENVVAR = value'})
