@@ -11,6 +11,9 @@ from zc.buildout import easy_install
 
 class Recipe(BaseRecipe):
 
+    def _packages(self):
+        return ['djangorecipebook']
+
     def __init__(self, buildout, name, options):
         super(Recipe, self).__init__(buildout, name, options)
         options.setdefault('args', '')
@@ -27,7 +30,7 @@ class Recipe(BaseRecipe):
         return "'%s'%s" % (self.options['settings'], args)
 
     def install(self):
-        __, working_set = self.egg.working_set(['djangorecipebook'])
+        __, working_set = self.egg.working_set(self._packages())
         script_path = self.__class__.__module__.replace('recipes', 'scripts')
         return easy_install.scripts(
             [(self.name, script_path, 'main')],

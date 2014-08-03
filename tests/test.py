@@ -64,6 +64,15 @@ class TestRecipeTests(RecipeTests):
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
                 return_value=(None, []))
+    def test_install_with_nose(self, working_set):
+        # Install of a test script with nose
+        self.init_recipe({'nose': '1'})
+        self.recipe.install()
+        self.assertListEqual(working_set.call_args[0][0],
+                             ['djangorecipebook', 'djangorecipebook[nose]'])
+
+    @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
+                return_value=(None, []))
     def test_install_workingdir(self, working_set):
         # Install of a test script with a working directory
         self.init_recipe({'workingdir': 'tests'})

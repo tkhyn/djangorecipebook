@@ -11,8 +11,15 @@ class Recipe(ManageRecipe):
 
     def __init__(self, buildout, name, options):
         super(Recipe, self).__init__(buildout, name, options)
+        options['nose'] = '1' if 'nose' in options else ''
         options.setdefault('apps', '')
         options.setdefault('workingdir', '')
+
+    def _packages(self):
+        pkgs = ['djangorecipebook']
+        if self.options['nose']:
+            pkgs.append('djangorecipebook[nose]')
+        return pkgs
 
     def _arguments(self):
         """

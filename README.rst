@@ -114,6 +114,13 @@ Test options
 args
    See `Manage options`_.
 
+nose
+   Use this option if you are using nose_ (and therefore django_nose_) to test
+   your Django app or project. This will simply include ``django_nose`` and
+   ``nose`` in your buildout.
+
+   Defaults to unset.
+
 apps
    The names of the apps that should be tested, separated by spaces or
    line-breaks.
@@ -231,3 +238,5 @@ will be ``mynewproject_parameters``.
 
 .. |copyright| unicode:: 0xA9
 .. _djangorecipe: https://github.com/rvanlaar/djangorecipe
+.. _nose: http://nose.readthedocs.org/en/latest/
+.. _django_nose: https://pypi.python.org/pypi/django-nose
