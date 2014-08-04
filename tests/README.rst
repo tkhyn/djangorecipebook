@@ -30,7 +30,7 @@ To create the ``python`` interpreter and the ``test`` and ``coverage`` scripts
 in the ``bin`` folder, simply run ``buildout`` in the main directory.
 
 You may want to use the ``bootstrap.py`` script to locally install buildout
-beforehand.
+locally beforehand.
 
 
 Running the tests
@@ -40,14 +40,15 @@ Simply generate the test scripts as above and, from the main directory, type::
 
    $ bin/test
 
-For coverage information, simply use the coverage script::
+For coverage information, you can add ``--with-coverage`` to the above test
+command but it's more convenient to use the shortcut::
 
    $ bin/coverage
 
 You may want to run the test suite manually from the command line (to launch
 tests from within an IDE, for example). To do this:
 
-   - make sure that all the required dependencies are available in the
+   - make sure that all the required dependencies are satisfied in the
      environment you are working in
    - add the main directory (where ``setup.py`` lies) to ``PYTHONPATH``
    - set the working directory to ``tests``
