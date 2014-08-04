@@ -26,7 +26,7 @@ Generating the test scripts
 djangorecipebook - surprisingly - uses zc.buildout_ to generate its test
 scripts.
 
-To create the ``python`` interpreter and the ``test`` and ``coverage`` scripts
+To create the ``python`` interpreter and the ``tests`` and ``coverage`` scripts
 in the ``bin`` folder, simply run ``buildout`` in the main directory.
 
 You may want to use the ``bootstrap.py`` script to locally install buildout
@@ -38,7 +38,7 @@ Running the tests
 
 Simply generate the test scripts as above and, from the main directory, type::
 
-   $ bin/test
+   $ bin/tests
 
 For coverage information, you can add ``--with-coverage`` to the above test
 command but it's more convenient to use the shortcut::
@@ -67,7 +67,7 @@ If you have never heard of tox, it is an automated tool that creates virtual
 environments with given python interpreters and/or library versions, and runs
 the test suite in each of these environments.
 
-Running the tox suite is straightforward, simply install tox and run it from
+Running the tox suite is just a matter of installing tox and running it from
 the main directory::
 
    $ pip install tox
