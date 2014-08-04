@@ -49,7 +49,7 @@ setup(
     packages=find_packages(exclude=('tests',)),
     include_package_data=True,
     package_data={
-        '': ['LICENSE.txt', 'README.rst']
+        '': ['LICENSE.txt', 'README.rst', 'CHANGES.rst']
     },
     entry_points={'zc.buildout': ['default = %s.recipes.manage:Recipe' % name,
                                   'manage = %s.recipes.manage:Recipe' % name,
