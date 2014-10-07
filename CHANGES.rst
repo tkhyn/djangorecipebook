@@ -1,8 +1,8 @@
 Changes
 =======
 
-1.1.1
------
+1.1.1 (2014-10-08)
+------------------
 
 - Fixed bug when calling manage script with a django command
 
