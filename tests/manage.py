@@ -3,7 +3,7 @@ import mock
 
 from .base import ScriptTests, RecipeTests, test_settings
 
-from djangorecipebook.scripts.manage import main
+from djangorecipebook.scripts.manage import main, manage_main
 from djangorecipebook.recipes.manage import Recipe
 
 
@@ -15,9 +15,21 @@ class ManageScriptTests(ScriptTests):
         # The manage script is a replacement for the default manage.py
         # script. It has all the same bells and whistles since all it
         # does is call the normal Django stuff.
+        manage_main(test_settings, 'help')
+        self.assertListEqual(mock_execute.call_args[0][0],
+                             ['manage.py', 'help',
+                              '--settings=%s' % test_settings])
+
+    @mock.patch('sys.argv', ['manage', 'help'])
+    @mock.patch('django.core.management.execute_from_command_line')
+    def test_manage_help(self, mock_execute):
+        # The manage script is a replacement for the default manage.py
+        # script. It has all the same bells and whistles since all it
+        # does is call the normal Django stuff.
         main(test_settings)
         self.assertListEqual(mock_execute.call_args[0][0],
-                             ['manage.py', '--settings=%s' % test_settings])
+                             ['manage.py', 'help',
+                              '--settings=%s' % test_settings])
 
 
 class ManageRecipeTests(RecipeTests):
