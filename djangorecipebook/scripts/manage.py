@@ -1,5 +1,5 @@
 """
-Recipe generating a management script
+Calls django's management script
 """
 
 import sys

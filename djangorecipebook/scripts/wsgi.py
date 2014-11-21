@@ -1,5 +1,5 @@
 """
-Recipe generating a wsgi script
+Creates the wsgi application
 """
 
 # derived from R van Laar's djangorecipe
