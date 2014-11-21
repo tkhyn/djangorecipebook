@@ -5,8 +5,10 @@ Recipe generating a management script
 import sys
 import re
 
-from .base import BaseRecipe
 from zc.buildout import easy_install
+from django.core.exceptions import ImproperlyConfigured
+
+from .base import BaseRecipe
 
 
 class Recipe(BaseRecipe):
@@ -15,8 +17,21 @@ class Recipe(BaseRecipe):
         return ['djangorecipebook']
 
     def __init__(self, buildout, name, options):
+        settings = options.setdefault('settings', '')
         super(Recipe, self).__init__(buildout, name, options)
         options.setdefault('args', '')
+
+        inst_apps = options.setdefault('inst_apps', '')
+
+        if settings and inst_apps:
+            raise ImproperlyConfigured(
+                'Cannot define a settings module and a list of installed apps')
+
+        self.added_settings = {}
+
+        if inst_apps:
+            self.added_settings['INSTALLED_APPS'] = \
+                tuple(self.options_to_list('inst_apps'))
 
     def _arguments(self):
         """
@@ -27,7 +42,21 @@ class Recipe(BaseRecipe):
             args += ', %s' % ', '.join(
                 "'%s'" % d for d in re.split('\s+', self.options['args']))
 
-        return "'%s'%s" % (self.options['settings'], args)
+        settings = self.options['settings']
+        if settings:
+            settings = "'%s'" % settings
+        else:
+            settings = 'added_settings'  # see self._initialization
+
+        return "%s%s" % (settings, args)
+
+    def _initialization(self):
+        init = super(Recipe, self)._initialization()
+
+        if not self.options['settings']:
+            init += '\n\nadded_settings = %s' % repr(self.added_settings)
+
+        return init
 
     def install(self):
         __, working_set = self.egg.working_set(self._packages())

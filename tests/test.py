@@ -1,5 +1,4 @@
 import os
-import sys
 import mock
 
 from ._base import ScriptTests, RecipeTests, test_settings
@@ -43,8 +42,7 @@ class TestRecipeTests(RecipeTests):
         self.recipe.install()
         test_script = self.script_path('test')
         self.assertTrue(os.path.exists(test_script))
-        self.assertIn("djangorecipebook.scripts.test.main('%s')" % \
-                        test_settings,
+        self.assertIn("djangorecipebook.scripts.test.main(added_settings)",
                       self.script_cat(test_script))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
@@ -57,9 +55,8 @@ class TestRecipeTests(RecipeTests):
         self.init_recipe({'apps': '\n    '.join(apps)})
         self.recipe.install()
         test_script = self.script_path('test')
-        self.assertIn("djangorecipebook.scripts.test.main('%s', %s)" % \
-                        (test_settings,
-                         ', '.join(["'%s'" % app for app in apps])),
+        self.assertIn("djangorecipebook.scripts.test.main(added_settings, %s)"
+                      % ', '.join(["'%s'" % app for app in apps]),
                       self.script_cat(test_script))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
