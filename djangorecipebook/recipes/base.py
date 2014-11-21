@@ -58,7 +58,7 @@ class BaseRecipe(object):
         return init
 
     def options_to_list(self, option):
-        value = self.options[option]
+        value = self.options.get(option, '')
         if value:
-            return re.split('\s+', self.options[option])
+            return re.split('\s+', value)
         return []

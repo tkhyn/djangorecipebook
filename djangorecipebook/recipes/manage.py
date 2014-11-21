@@ -17,21 +17,25 @@ class Recipe(BaseRecipe):
         return ['djangorecipebook']
 
     def __init__(self, buildout, name, options):
-        settings = options.setdefault('settings', '')
+        options.setdefault('settings', '')
         super(Recipe, self).__init__(buildout, name, options)
         options.setdefault('args', '')
 
         inst_apps = options.setdefault('inst_apps', '')
+        apps = options.get('apps', '')
+        self.added_settings = {}
+        if inst_apps or apps:
+            inst_apps = self.options_to_list('inst_apps')
+            apps = self.options_to_list('apps')
+            inst_apps.extend(set(apps).difference(inst_apps))
+            self.added_settings['INSTALLED_APPS'] = tuple(inst_apps)
 
-        if settings and inst_apps:
+    def install(self):
+        if self.options['settings'] and self.options['inst_apps']:
             raise ImproperlyConfigured(
                 'Cannot define a settings module and a list of installed apps')
 
-        self.added_settings = {}
-
-        if inst_apps:
-            self.added_settings['INSTALLED_APPS'] = \
-                tuple(self.options_to_list('inst_apps'))
+        super(Recipe, self).install()
 
     def _arguments(self):
         """
