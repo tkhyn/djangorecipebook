@@ -26,8 +26,10 @@ class Recipe(ManageRecipe):
         Adds the apps to the arguments
         """
         args = super(Recipe, self)._arguments()
-
         for app in self.options_to_list('apps'):
             args += ", '%s'" % app
+
+        if 'south' in self.options:
+            args += ", use_south=True"
 
         return args
