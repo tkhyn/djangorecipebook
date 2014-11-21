@@ -1,7 +1,7 @@
 import os
 import mock
 
-from .base import ScriptTests, RecipeTests, test_settings
+from ._base import ScriptTests, RecipeTests, test_settings
 
 from djangorecipebook.scripts.manage import main
 from djangorecipebook.recipes.manage import Recipe
