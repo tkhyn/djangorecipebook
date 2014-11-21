@@ -7,7 +7,8 @@ Changes
 - Django 1.7 is now the officially supported Django release
 - Added ``makemigrations`` recipe that supports Django 1.7 and south migrations
 
-1.1 (2014-08-03)
+
+1.1 (03-08-2014)
 ----------------
 
 - Added ``nose`` and ``workingdir`` options to ``test`` recipe, to install
@@ -16,13 +17,19 @@ Changes
   supplementary command line arguments
 - Added ``envvar`` option to all recipes to set environment variables
 
-1.0 (2014-08-02)
+1.1.1 (08-10-2014)
+..................
+
+- Fixed bug when calling manage script with a django command
+
+
+1.0 (02-08-2014)
 ----------------
 
 - Supports Django 1.4 to 1.7, and relevant python versions (2.6 to 3.4)
 
 
-0.2.1 (2014-07-20)
+0.2.1 (20-07-2014)
 ------------------
 
 - Added virtualenv option in wsgi recipe
@@ -30,7 +37,7 @@ Changes
 - Fixed settings issue when using --settings argument
 
 
-0.2 (2014-04-08)
+0.2 (08-04-2014)
 ----------------
 
 - Added create recipe and templating engine
@@ -38,12 +45,12 @@ Changes
 - Removed script-name option (from docs, as it was not implemented)
 
 
-0.1 (2014-04-05)
+0.1 (05-04-2014)
 ----------------
 
 - Initial version. Manage, test and wsgi recipes implemented
 
-0.0 (2014-04-04)
+0.0 (04-04-2014)
 ----------------
 
 - Birth

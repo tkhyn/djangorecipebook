@@ -51,7 +51,11 @@ def manage_main(settings, command, *args):
     if command:
         command = [command]
     else:
-        command = []
+        try:
+            command = [sys.argv.pop(1)]
+        except IndexError:
+            raise ValueError('No django command found. A django command is '
+                             'required when calling manage.py.')
 
     # the arguments need to be inserted in sys.argv as subsequent packages
     # (e.g. nose) may use sys.argv and forget about what is passed to manage.py
