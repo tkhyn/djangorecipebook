@@ -51,12 +51,11 @@ setup(
     package_data={
         '': ['LICENSE.txt', 'README.rst', 'CHANGES.rst']
     },
-    entry_points={'zc.buildout': ['default = %s.recipes.manage:Recipe' % name,
-                                  'manage = %s.recipes.manage:Recipe' % name,
-                                  'wsgi = %s.recipes.wsgi:Recipe' % name,
-                                  'fcgi = %s.recipes.fcgi:Recipe' % name,
-                                  'test = %s.recipes.test:Recipe' % name,
-                                  'create = %s.recipes.create:Recipe' % name, ]
+    entry_points={'zc.buildout':
+        ['%(recipe)s = %(name)s.recipes.%(recipe)s:Recipe' %
+            {'recipe': recipe, 'name': name} for recipe
+            in ('manage', 'wsgi', 'fcgi', 'test', 'create', 'makemigrations')]
+        + ['default = %s.recipes.manage:Recipe' % name]
     },
     install_requires=(
         'zc.buildout',
