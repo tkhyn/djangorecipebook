@@ -1,6 +1,12 @@
 Changes
 =======
 
+1.2 (dev)
+---------
+
+- Django 1.7 is now the officially supported Django release
+- Added ``makemigrations`` recipe that supports Django 1.7 and south migrations
+
 1.1 (2014-08-03)
 ----------------
 
