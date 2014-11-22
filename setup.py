@@ -47,10 +47,6 @@ setup(
         'Topic :: Software Development :: Build Tools',
     ],
     packages=find_packages(exclude=('tests',)),
-    include_package_data=True,
-    package_data={
-        '': ['LICENSE.txt', 'README.rst', 'CHANGES.rst']
-    },
     entry_points={'zc.buildout':
         ['%(recipe)s = %(name)s.recipes.%(recipe)s:Recipe' %
             {'recipe': recipe, 'name': name} for recipe
