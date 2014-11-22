@@ -8,6 +8,11 @@ Changes
 - Added ``makemigrations`` recipe that supports Django 1.7 and south migrations
 - Added ``migrate`` recipe
 
+1.2.1 (dev)
+...........
+
+- Fixed template directory bug in create recipe
+
 
 1.1 (03-08-2014)
 ----------------

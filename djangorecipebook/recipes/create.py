@@ -27,7 +27,7 @@ class Recipe(BaseRecipe):
         if bo_options:
             bo_dirs = bo_options.get('template-dirs', None)
             if bo_dirs:
-                temp_dirs_str.append(bo_options)
+                temp_dirs_str.append(bo_dirs)
         recipe_options = options.get('template-dirs', None)
         if recipe_options:
             temp_dirs_str.append(recipe_options)
