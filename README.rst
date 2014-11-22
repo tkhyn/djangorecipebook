@@ -36,10 +36,13 @@ djangorecipebook:fcgi
    Creates a fcgi script for the project
 
 djangorecipebook:test
-   Creates a script that invokes ``manage.py test [apps]``
+   Creates a script that invokes ``manage.py test [apps]``.
 
 djangorecipebook:makemigrations (new in v1.2)
    Generates south_ and/or Django 1.7+ migrations
+
+djangorecipebook:migrate (new in v1.2)
+   Invokes ``manage.py migrate [apps]``. For the lazy ones.
 
 djangorecipebook:create
    Creates a django project from a user-defined template or using django's
@@ -185,6 +188,14 @@ The ``makemigrations`` recipe will generate:
 When using south migrations, the ``--init`` command line option can be provided
 when invoking the script. ``--init`` has no effect whatsoever on Django 1.7+
 migrations.
+
+
+Migrate options
+...............
+
+See `Tests options`_. The only difference is that you cannot use minimal
+settings (the default is ``'settings'``) nor the ``inst_apps`` option. Indeed,
+migration generally requires a database to be setup.
 
 
 Create options
