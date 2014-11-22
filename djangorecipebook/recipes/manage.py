@@ -3,7 +3,6 @@ Recipe generating a management script
 """
 
 import sys
-import re
 
 from zc.buildout import easy_install
 from django.core.exceptions import ImproperlyConfigured
@@ -35,9 +34,8 @@ class Recipe(BaseRecipe):
         Returns the list of arguments for the djangorecipebook script
         """
         args = ''
-        if self.options['args']:
-            args += ', %s' % ', '.join(
-                "'%s'" % d for d in re.split('\s+', self.options['args']))
+        for arg in self.options_to_list('args'):
+            args += ", '%s'" % arg
 
         settings = self.options['settings']
         if settings:
@@ -71,3 +69,19 @@ class Recipe(BaseRecipe):
 
     def update(self):
         self.install()
+
+
+class AppsRecipe(Recipe):
+    """
+    A management recipe with an 'apps' option
+    """
+
+    def __init__(self, buildout, name, options):
+        options.setdefault('apps', '')
+        super(AppsRecipe, self).__init__(buildout, name, options)
+
+    def _arguments(self):
+        args = super(AppsRecipe, self)._arguments()
+        for app in self.options_to_list('apps'):
+            args += ", '%s'" % app
+        return args

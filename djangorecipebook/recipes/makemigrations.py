@@ -4,14 +4,10 @@ Recipe generating a script to generate migrations
 
 from django.core.exceptions import ImproperlyConfigured
 
-from .manage import Recipe as ManageRecipe
+from .manage import AppsRecipe
 
 
-class Recipe(ManageRecipe):
-
-    def __init__(self, buildout, name, options):
-        super(Recipe, self).__init__(buildout, name, options)
-        options.setdefault('apps', '')
+class Recipe(AppsRecipe):
 
     def install(self):
         if not any((self.options['settings'], self.options['inst_apps'],
@@ -26,8 +22,6 @@ class Recipe(ManageRecipe):
         Adds the apps to the arguments
         """
         args = super(Recipe, self)._arguments()
-        for app in self.options_to_list('apps'):
-            args += ", '%s'" % app
 
         if 'south' in self.options:
             args += ", use_south=True"
