@@ -194,7 +194,7 @@ migrations.
 Migrate options
 ...............
 
-See `Tests options`_. The only difference is that you cannot use minimal
+See `Test options`_. The only difference is that you cannot use minimal
 settings (the default is ``'settings'``) nor the ``inst_apps`` option. Indeed,
 migration generally requires a database to be setup.
 
