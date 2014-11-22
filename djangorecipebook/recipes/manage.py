@@ -3,10 +3,11 @@ Recipe generating a management script
 """
 
 import sys
-import re
+
+from zc.buildout import easy_install
+from django.core.exceptions import ImproperlyConfigured
 
 from .base import BaseRecipe
-from zc.buildout import easy_install
 
 
 class Recipe(BaseRecipe):
@@ -15,21 +16,48 @@ class Recipe(BaseRecipe):
         return ['djangorecipebook']
 
     def __init__(self, buildout, name, options):
+        options.setdefault('settings', '')
         super(Recipe, self).__init__(buildout, name, options)
         options.setdefault('args', '')
+
+        inst_apps = options.setdefault('inst_apps', '')
+        apps = options.get('apps', '')
+        self.added_settings = {}
+        if inst_apps or apps:
+            inst_apps = self.options_to_list('inst_apps')
+            apps = self.options_to_list('apps')
+            inst_apps.extend(set(apps).difference(inst_apps))
+            self.added_settings['INSTALLED_APPS'] = tuple(inst_apps)
 
     def _arguments(self):
         """
         Returns the list of arguments for the djangorecipebook script
         """
         args = ''
-        if self.options['args']:
-            args += ', %s' % ', '.join(
-                "'%s'" % d for d in re.split('\s+', self.options['args']))
+        for arg in self.options_to_list('args'):
+            args += ", '%s'" % arg
 
-        return "'%s'%s" % (self.options['settings'], args)
+        settings = self.options['settings']
+        if settings:
+            settings = "'%s'" % settings
+        else:
+            settings = 'added_settings'  # see self._initialization
+
+        return "%s%s" % (settings, args)
+
+    def _initialization(self):
+        init = super(Recipe, self)._initialization()
+
+        if not self.options['settings']:
+            init += '\n\nadded_settings = %s' % repr(self.added_settings)
+
+        return init
 
     def install(self):
+        if self.options['settings'] and self.options['inst_apps']:
+            raise ImproperlyConfigured(
+                'Cannot define a settings module and a list of installed apps')
+
         __, working_set = self.egg.working_set(self._packages())
         script_path = self.__class__.__module__.replace('recipes', 'scripts')
         return easy_install.scripts(
@@ -41,3 +69,19 @@ class Recipe(BaseRecipe):
 
     def update(self):
         self.install()
+
+
+class AppsRecipe(Recipe):
+    """
+    A management recipe with an 'apps' option
+    """
+
+    def __init__(self, buildout, name, options):
+        options.setdefault('apps', '')
+        super(AppsRecipe, self).__init__(buildout, name, options)
+
+    def _arguments(self):
+        args = super(AppsRecipe, self)._arguments()
+        for app in self.options_to_list('apps'):
+            args += ", '%s'" % app
+        return args

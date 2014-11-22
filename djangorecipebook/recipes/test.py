@@ -2,17 +2,15 @@
 Recipe generating a test script
 """
 
-import re
-
-from .manage import Recipe as ManageRecipe
+from .manage import AppsRecipe
 
 
-class Recipe(ManageRecipe):
+class Recipe(AppsRecipe):
 
     def __init__(self, buildout, name, options):
         super(Recipe, self).__init__(buildout, name, options)
+
         options['nose'] = '1' if 'nose' in options else ''
-        options.setdefault('apps', '')
         options.setdefault('workingdir', '')
 
     def _packages(self):
@@ -21,16 +19,6 @@ class Recipe(ManageRecipe):
             pkgs.append('djangorecipebook[nose]')
         return pkgs
 
-    def _arguments(self):
-        """
-        Returns the list of arguments for the djangorecipebook script
-        """
-        args = super(Recipe, self)._arguments()
-        if self.options['apps']:
-            for app in re.split('\s+', self.options['apps']):
-                args += ", '%s'" % app
-
-        return args
 
     def _initialization(self):
         init = super(Recipe, self)._initialization()

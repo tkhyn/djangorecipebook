@@ -1,5 +1,5 @@
 """
-Recipe generating a wsgi script
+Runs FCGI handler
 """
 
 import os

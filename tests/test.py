@@ -1,8 +1,7 @@
 import os
-import sys
 import mock
 
-from .base import ScriptTests, RecipeTests, test_settings
+from ._base import ScriptTests, RecipeTests
 
 from djangorecipebook.scripts.test import main
 from djangorecipebook.recipes.test import Recipe
@@ -17,10 +16,10 @@ class TestScriptTests(ScriptTests):
         # script. It has all the same bells and whistles since all it
         # does is call the normal Django stuff.
         apps = ('app1', 'app2')
-        main(test_settings, *apps)
+        main('settings', *apps)
         self.assertListEqual(mock_execute.call_args[0][0],
-                             ['manage.py', 'test',
-                              '--settings=%s' % test_settings] + list(apps))
+                             ['manage.py', 'test', '--settings=settings']
+                             + list(apps))
 
 
 class TestRecipeTests(RecipeTests):
@@ -43,8 +42,7 @@ class TestRecipeTests(RecipeTests):
         self.recipe.install()
         test_script = self.script_path('test')
         self.assertTrue(os.path.exists(test_script))
-        self.assertIn("djangorecipebook.scripts.test.main('%s')" % \
-                        test_settings,
+        self.assertIn("djangorecipebook.scripts.test.main(added_settings)",
                       self.script_cat(test_script))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
@@ -57,9 +55,8 @@ class TestRecipeTests(RecipeTests):
         self.init_recipe({'apps': '\n    '.join(apps)})
         self.recipe.install()
         test_script = self.script_path('test')
-        self.assertIn("djangorecipebook.scripts.test.main('%s', %s)" % \
-                        (test_settings,
-                         ', '.join(["'%s'" % app for app in apps])),
+        self.assertIn("djangorecipebook.scripts.test.main(added_settings, %s)"
+                      % ', '.join(["'%s'" % app for app in apps]),
                       self.script_cat(test_script))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',

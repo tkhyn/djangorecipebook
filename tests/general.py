@@ -6,7 +6,7 @@ import os
 import sys
 import mock
 
-from .base import RecipeTests, test_project
+from ._base import RecipeTests, test_project
 
 # we use the very simple manage.Recipe to test BaseRecipe functionalities
 from djangorecipebook.recipes import manage
@@ -49,7 +49,7 @@ class GeneralRecipeTests(RecipeTests):
         # When an init code is specified, it should be added to the script
         self.init_recipe({'initialization': 'import os\nassert True'})
         self.recipe.install()
-        self.assertIn('import os\nassert True\n\nimport djangorecipebook',
+        self.assertIn('import os\nassert True\n\nadded_settings = {}\n\nimport djangorecipebook',
                       self.script_cat('manage'))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
@@ -62,9 +62,10 @@ class GeneralRecipeTests(RecipeTests):
         self.init_recipe({'args': '\n    '.join(args)})
         self.recipe.install()
         manage_script = self.script_path('manage')
-        self.assertIn("djangorecipebook.scripts.manage.main('settings', %s)"
-                      % ', '.join(["'%s'" % arg for arg in args]),
-                      self.script_cat(manage_script))
+        script_cat = self.script_cat(manage_script)
+        self.assertIn("djangorecipebook.scripts.manage.main(added_settings, %s)"
+                      % ', '.join(["'%s'" % arg for arg in args]), script_cat)
+        self.assertIn('added_settings = {', script_cat)
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
                 return_value=(None, []))

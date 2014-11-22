@@ -1,18 +1,52 @@
 """
-Recipe generating a management script
+Calls django's management script
 """
 
 import sys
 
+from django.conf import settings as dj_settings
+from django.utils.six import string_types
 
-def manage_main(settings_module, command, *args):
+
+DEFAULT_SETTINGS = dict(
+    SECRET_KEY='secret',
+    DATABASES={
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3'
+        }
+    },
+    MIDDLEWARE_CLASSES=(),
+    INSTALLED_APPS=(
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+    )
+)
+
+
+def manage_main(settings, command, *args):
     from django.core import management
-    settings = []
+
+    settings_arg = []
     for arg in sys.argv:
         if arg.startswith('--settings='):
             break
     else:
-        settings = ['--settings=%s' % settings_module]
+        if isinstance(settings, string_types):
+            settings_arg = ['--settings=' + settings]
+        else:
+            # using default settings, eventually amended
+            if isinstance(settings, dict):
+                new_settings = dict(DEFAULT_SETTINGS)  # make a copy
+                new_settings['INSTALLED_APPS'] += \
+                    settings.pop('INSTALLED_APPS', ())
+                new_settings.update(settings)
+            else:
+                new_settings = DEFAULT_SETTINGS
+            dj_settings.configure(**new_settings)
 
     if command:
         command = [command]
@@ -24,11 +58,11 @@ def manage_main(settings_module, command, *args):
                              'required when calling manage.py.')
 
     # the arguments need to be inserted in sys.argv as subsequent packages
-    # (e.g. nose via django_nose) fetch them directly from it
+    # (e.g. nose) may use sys.argv and forget about what is passed to manage.py
     sys.argv[1:1] = args
     management.execute_from_command_line(['manage.py'] + command +
-                                         settings + sys.argv[1:])
+                                         settings_arg + sys.argv[1:])
 
 
-def main(settings_module, *args):
-    manage_main(settings_module, None, *args)
+def main(settings, *args):
+    manage_main(settings, None, *args)

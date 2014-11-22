@@ -12,8 +12,12 @@ About
 The recipes available in djangorecipebook are mostly derived from
 djangorecipe_'s functionalities. However, while djangorecipe aims at generating
 all scripts in one part, djangorecipebook enables you to define one part per
-script (create, manage, wsgi, test), hence allowing the use of different
+script (create, manage, wsgi, test, make), hence allowing the use of different
 settings and/or eggs for each part.
+
+Through its automatic minimal settings generation, djangorecipebook is
+particularly adapted to reusable apps development, e.g. for testing or
+generating migrations.
 
 djangorecipebook works with django 1.4 to 1.7 and relevant python versions
 (2.6 to 3.4, depending on django version).
@@ -32,12 +36,18 @@ djangorecipebook:fcgi
    Creates a fcgi script for the project
 
 djangorecipebook:test
-   Creates a script that invokes ``manage.py test [apps]``
+   Creates a script that invokes ``manage.py test [apps]``.
+
+djangorecipebook:makemigrations (new in v1.2)
+   Generates south_ and/or Django 1.7+ migrations
+
+djangorecipebook:migrate (new in v1.2)
+   Invokes ``manage.py migrate [apps]``. For the lazy ones.
 
 djangorecipebook:create
    Creates a django project from a user-defined template or using django's
-   ``startproject`` management command. This recipe will not generate any script.
-   The name of the created project is the name of the section.
+   ``startproject`` management command. This recipe will not generate any
+   script. The name of the created project is the name of the section.
 
 
 Options
@@ -55,7 +65,8 @@ project-dir
 settings
    The settings module to load, imported from the project directory.
 
-   Defaults to ``'settings'``.
+   Defaults to ``'settings'`` or a set of minimal settings, depending on the
+   recipe.
 
 extra-paths
    Paths to add to sys.path in the generated script.
@@ -78,6 +89,18 @@ initialization
 Manage options
 ..............
 
+settings
+   If a settings module is not provided, the settings will be a set of minimal
+   parameters, with the added installed apps below.
+
+   Defaults to minimal settings.
+
+inst_apps
+   The apps to add to the ``INSTALLED_APPS`` setting if no settings module is
+   provided. This option should not be used when a settings module is provided.
+
+   Defaults to ``''``.
+
 args
    Any command-line argument you wish to have added to the generated script,
    separated by spaces or line-breaks.
@@ -87,6 +110,10 @@ args
 
 WSGI and FCGI options
 .....................
+
+settings
+   Must be a settings module, no default minimal settings are available for
+   wsgi and fcgi recipes.
 
 log-file
    The path to a log file where all stdout and/or stderr data should be
@@ -111,7 +138,7 @@ virtualenv
 Test options
 ............
 
-args
+settings, inst_apps, args
    See `Manage options`_.
 
 nose
@@ -123,9 +150,57 @@ nose
 
 apps
    The names of the apps that should be tested, separated by spaces or
-   line-breaks.
+   line-breaks. If using minimal settings, these apps will be added to the
+   ``INSTALLED_APPS`` (in addition to those in the ``inst_apps`` option).
 
-   Defaults to all the apps defined in ``INSTALLED_APPS``
+   Defaults to ``''``, all the apps in ``INSTALLED_APPS``
+
+
+Makemigrations options
+......................
+
+settings, inst_apps, args
+   See `Manage options`_.
+
+apps
+   The names of the apps for which migrations should be generated, separated
+   by spaces or line-breaks. If using minimal settings, these apps will be
+   added to the ``INSTALLED_APPS`` (in addition to those in the ``inst_apps``
+   option).
+
+   Defaults to ``''``, all the apps in ``INSTALLED_APPS``
+
+south
+   If this option has a value, south_ migrations will also be generated when
+   using Django 1.7+ (and ``south`` will be installed in your buildout
+   environment). This option has no effect with Django < 1.7, where ``south``
+   migrations will always be generated and ``south`` will always be installed.
+
+   Defaults to ``undefined`` (no south migrations generation).
+
+
+The ``makemigrations`` recipe will generate:
+
+- Django 1.7+ migrations if you are using Django 1.7+
+- south_ migrations if:
+   - you are using Django 1.7+ and provide a value for the ``south`` option
+   - or you are using Django < 1.7, whatever the value of the ``south`` option
+
+When using south migrations, the ``--init`` command line option can be provided
+when invoking the script. ``--init`` has no effect whatsoever on Django 1.7+
+migrations.
+
+
+Migrate options
+...............
+
+See `Tests options`_. The only difference is that you cannot use minimal
+settings (the default is ``'settings'``) nor the ``inst_apps`` option. Indeed,
+migration generally requires a database to be setup.
+
+If you use this recipe with django < 1.7 in your environment / buildout
+configuration, south_ will be installed.
+
 
 Create options
 ..............
@@ -240,3 +315,4 @@ will be ``mynewproject_parameters``.
 .. _djangorecipe: https://github.com/rvanlaar/djangorecipe
 .. _nose: http://nose.readthedocs.org/en/latest/
 .. _django_nose: https://pypi.python.org/pypi/django-nose
+.. _south: http://south.readthedocs.org

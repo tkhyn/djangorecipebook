@@ -1,5 +1,5 @@
 """
-Recipe generating a test script
+Calls the management script with the 'test' command
 """
 
 from .manage import manage_main

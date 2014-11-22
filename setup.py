@@ -51,18 +51,21 @@ setup(
     package_data={
         '': ['LICENSE.txt', 'README.rst', 'CHANGES.rst']
     },
-    entry_points={'zc.buildout': ['default = %s.recipes.manage:Recipe' % name,
-                                  'manage = %s.recipes.manage:Recipe' % name,
-                                  'wsgi = %s.recipes.wsgi:Recipe' % name,
-                                  'fcgi = %s.recipes.fcgi:Recipe' % name,
-                                  'test = %s.recipes.test:Recipe' % name,
-                                  'create = %s.recipes.create:Recipe' % name, ]
+    entry_points={'zc.buildout':
+        ['%(recipe)s = %(name)s.recipes.%(recipe)s:Recipe' %
+            {'recipe': recipe, 'name': name} for recipe
+            in ('manage', 'wsgi', 'fcgi', 'test', 'migrate', 'makemigrations',
+                'create')]
+        + ['default = %s.recipes.manage:Recipe' % name]
     },
     install_requires=(
         'zc.buildout',
         'zc.recipe.egg',
         'django>=1.4',
     ),
-    extras_require={'nose': ('django_nose',)},
+    extras_require={
+        'nose': ('django_nose',),
+        'south': ('south',),
+    },
     zip_safe=False,
 )
