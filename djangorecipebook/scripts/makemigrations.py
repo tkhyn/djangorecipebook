@@ -32,11 +32,22 @@ def main(settings, *args, **kwargs):
         # restore sys.argv
         sys.argv = argv
 
-    if kwargs.pop('use_south', False) or django.VERSION < (1, 7):
+    use_south = kwargs.pop('use_south', False)
 
-        # south is not required here, but trying to import it will raise an
-        # ImportError if it is not available
-        import south
+    if use_south or django.VERSION < (1, 7):
+
+        # south itself is not required here, but trying to import it will raise
+        # an ImportError if it is not available
+        try:
+            import south
+        except ImportError as e:
+            if django.VERSION < (1, 7):
+                raise ImportError(
+                    'Could not import south and running Django < 1.7. '
+                    'No migrations could be generated.'
+                )
+            elif use_south:
+                raise e
 
         if isinstance(settings, dict):
             # adds south to INSTALLED_APPS if we're using minimal settings
@@ -46,5 +57,5 @@ def main(settings, *args, **kwargs):
         # use --auto flag if --init flag was not provided
         sys.argv.append(south_init or '--auto')
 
-        # run south migrations
+        # generate south migrations
         manage_main(settings, 'schemamigration', *args)
