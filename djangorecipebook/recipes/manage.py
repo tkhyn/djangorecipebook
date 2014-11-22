@@ -30,13 +30,6 @@ class Recipe(BaseRecipe):
             inst_apps.extend(set(apps).difference(inst_apps))
             self.added_settings['INSTALLED_APPS'] = tuple(inst_apps)
 
-    def install(self):
-        if self.options['settings'] and self.options['inst_apps']:
-            raise ImproperlyConfigured(
-                'Cannot define a settings module and a list of installed apps')
-
-        super(Recipe, self).install()
-
     def _arguments(self):
         """
         Returns the list of arguments for the djangorecipebook script
@@ -63,6 +56,10 @@ class Recipe(BaseRecipe):
         return init
 
     def install(self):
+        if self.options['settings'] and self.options['inst_apps']:
+            raise ImproperlyConfigured(
+                'Cannot define a settings module and a list of installed apps')
+
         __, working_set = self.egg.working_set(self._packages())
         script_path = self.__class__.__module__.replace('recipes', 'scripts')
         return easy_install.scripts(
