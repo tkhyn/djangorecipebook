@@ -6,6 +6,7 @@ Changes
 
 - Django 1.7 is now the officially supported Django release
 - Added ``makemigrations`` recipe that supports Django 1.7 and south migrations
+- Added ``migrate`` recipe
 
 
 1.1 (03-08-2014)
