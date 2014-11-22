@@ -12,8 +12,12 @@ About
 The recipes available in djangorecipebook are mostly derived from
 djangorecipe_'s functionalities. However, while djangorecipe aims at generating
 all scripts in one part, djangorecipebook enables you to define one part per
-script (create, manage, wsgi, test), hence allowing the use of different
+script (create, manage, wsgi, test, make), hence allowing the use of different
 settings and/or eggs for each part.
+
+Through its automatic minimal settings generation, djangorecipebook is
+particularly adapted to reusable apps development, e.g. for testing or
+generating migrations.
 
 djangorecipebook works with django 1.4 to 1.7 and relevant python versions
 (2.6 to 3.4, depending on django version).
@@ -35,12 +39,12 @@ djangorecipebook:test
    Creates a script that invokes ``manage.py test [apps]``
 
 djangorecipebook:makemigrations (new in v1.2)
-   Generated south_ and django 1.7 migrations
+   Generates south_ and/or Django 1.7+ migrations
 
 djangorecipebook:create
    Creates a django project from a user-defined template or using django's
-   ``startproject`` management command. This recipe will not generate any script.
-   The name of the created project is the name of the section.
+   ``startproject`` management command. This recipe will not generate any
+   script. The name of the created project is the name of the section.
 
 
 Options
@@ -165,7 +169,7 @@ apps
 
 south
    If this option has a value, south_ migrations will also be generated when
-   using Django 1.7. This option has no effect with Django < 1.7, where south
+   using Django 1.7+. This option has no effect with Django < 1.7, where south
    migrations will always be generated.
 
    Defaults to ``undefined`` (no south migrations generation).
@@ -173,10 +177,14 @@ south
 
 The ``makemigrations`` recipe will generate:
 
-- Django 1.7 migrations if you are using Django 1.7
+- Django 1.7+ migrations if you are using Django 1.7+
 - south_ migrations if:
-   - you are using Django 1.7 and provide a value for the ``south`` option
+   - you are using Django 1.7+ and provide a value for the ``south`` option
    - or you are using Django < 1.7, whatever the value of the ``south`` option
+
+When using south migrations, the ``--init`` command line option can be provided
+when invoking the script. ``--init`` has no effect whatsoever on Django 1.7+
+migrations.
 
 
 Create options
