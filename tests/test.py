@@ -1,7 +1,7 @@
 import os
 import mock
 
-from ._base import ScriptTests, RecipeTests, test_settings
+from ._base import ScriptTests, RecipeTests
 
 from djangorecipebook.scripts.test import main
 from djangorecipebook.recipes.test import Recipe
@@ -16,10 +16,10 @@ class TestScriptTests(ScriptTests):
         # script. It has all the same bells and whistles since all it
         # does is call the normal Django stuff.
         apps = ('app1', 'app2')
-        main(test_settings, *apps)
+        main('settings', *apps)
         self.assertListEqual(mock_execute.call_args[0][0],
-                             ['manage.py', 'test',
-                              '--settings=%s' % test_settings] + list(apps))
+                             ['manage.py', 'test', '--settings=settings']
+                             + list(apps))
 
 
 class TestRecipeTests(RecipeTests):
