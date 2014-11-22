@@ -16,7 +16,7 @@ try:
 except ImportError:
     import unittest
 
-from zc.buildout.testing import TestOptions
+from zc.buildout.testing import TestOptions, Buildout
 
 
 test_project = 'project'
@@ -62,7 +62,7 @@ class RecipeTests(unittest.TestCase):
 
     def init_recipe(self, options={}, name=None):
 
-        buildout_obj = {'buildout': {
+        buildout_opts = {'buildout': {
             'eggs-directory': self.eggs_dir,
             'develop-eggs-directory': self.develop_eggs_dir,
             'bin-directory': self.bin_dir,
@@ -75,8 +75,11 @@ class RecipeTests(unittest.TestCase):
         }}
 
         name = name or self.recipe_name
-        options_obj = TestOptions(buildout_obj, name,
+        options_obj = TestOptions(buildout_opts, name,
                                   dict(self.recipe_options, **options))
+
+        buildout_obj = Buildout()
+        buildout_obj['buildout'].update(buildout_opts['buildout'])
 
         self.recipe = self.recipe_class(buildout_obj, name, options_obj)
 
