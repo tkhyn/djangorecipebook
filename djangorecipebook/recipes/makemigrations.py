@@ -2,12 +2,19 @@
 Recipe generating a script to generate migrations
 """
 
+import django
 from django.core.exceptions import ImproperlyConfigured
 
 from .manage import AppsRecipe
 
 
 class Recipe(AppsRecipe):
+
+    def _packages(self):
+        pkgs = ['djangorecipebook']
+        if django.VERSION < (1, 7) or 'south' in self.options:
+            pkgs.append('djangorecipebook[south]')
+        return pkgs
 
     def install(self):
         if not any((self.options['settings'], self.options['inst_apps'],

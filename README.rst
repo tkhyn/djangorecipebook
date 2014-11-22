@@ -172,8 +172,9 @@ apps
 
 south
    If this option has a value, south_ migrations will also be generated when
-   using Django 1.7+. This option has no effect with Django < 1.7, where south
-   migrations will always be generated.
+   using Django 1.7+ (and ``south`` will be installed in your buildout
+   environment). This option has no effect with Django < 1.7, where ``south``
+   migrations will always be generated and ``south`` will always be installed.
 
    Defaults to ``undefined`` (no south migrations generation).
 
@@ -196,6 +197,9 @@ Migrate options
 See `Tests options`_. The only difference is that you cannot use minimal
 settings (the default is ``'settings'``) nor the ``inst_apps`` option. Indeed,
 migration generally requires a database to be setup.
+
+If you use this recipe with django < 1.7 in your environment / buildout
+configuration, south_ will be installed.
 
 
 Create options

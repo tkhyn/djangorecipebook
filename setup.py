@@ -63,6 +63,9 @@ setup(
         'zc.recipe.egg',
         'django>=1.4',
     ),
-    extras_require={'nose': ('django_nose',)},
+    extras_require={
+        'nose': ('django_nose',),
+        'south': ('south',),
+    },
     zip_safe=False,
 )
