@@ -186,8 +186,8 @@ The ``makemigrations`` recipe will generate:
    - you are using Django 1.7+ and provide a value for the ``south`` option
    - or you are using Django < 1.7, whatever the value of the ``south`` option
 
-When using south migrations, the ``--init`` command line option can be provided
-when invoking the script. ``--init`` has no effect whatsoever on Django 1.7+
+When using south migrations, the ``--initial`` command line option can be provided
+when invoking the script. ``--initial`` has no effect whatsoever on Django 1.7+
 migrations.
 
 

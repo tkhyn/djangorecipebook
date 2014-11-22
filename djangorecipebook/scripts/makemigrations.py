@@ -4,58 +4,88 @@ Also runs south's 'schemamigration' if applicable
 """
 
 import sys
-from copy import copy
+from subprocess import Popen
 
 import django
 
 from .manage import manage_main
 
 
+class SouthWarning(Warning):
+    pass
+
+def make_django_migrations(settings, args):
+    # remove any south-specific flag from args
+    for arg in reversed(args):
+        if arg in ('--initial', '--auto', '--update'):
+            args.remove(arg)
+    manage_main(settings, 'makemigrations', *args)
+
+
+def make_south_migrations(settings, args):
+    # remove any django-specific flag from args
+    for arg in reversed(args):
+        if arg in ('--dry-run', '--merge', '--name'):
+            args.remove(arg)
+    if set(['--auto', '--initial', '--add-field', '--empty']).isdisjoint(args):
+        # default mode is 'auto'
+        args.append('--auto')
+
+    if isinstance(settings, dict):
+        # adds south to INSTALLED_APPS if we're using minimal settings
+        settings['INSTALLED_APPS'] = settings.get('INSTALLED_APPS', ()) \
+                                     + ('south',)
+
+    manage_main(settings, 'schemamigration', *args)
+
+
 def main(settings, *args, **kwargs):
 
-    # detect --init flag and removes it from args to run makemigrations
-    try:
-        south_init = sys.argv.pop(sys.argv.index('--init'))
-    except ValueError:
-        # --init not found
-        south_init = False
+    # we empty sys.argv so that command line params can be intercepted
+    # by the make_*_migrations functions above
+    sys_argv = sys.argv[1:]
+    sys.argv = sys.argv[:1]
 
-    if django.VERSION >= (1, 7):
-        # run django migrations if django >= 1.7
+    args = list(args)
 
-        # we backyp sys.argv as we'll need to restore it if schemamigration
-        # should be ran afterwards, as manage_main amends sys.argv
-        argv = copy(sys.argv)
-
-        manage_main(settings, 'makemigrations', *args)
-
-        # restore sys.argv
-        sys.argv = argv
-
-    use_south = kwargs.pop('use_south', False)
-
-    if use_south or django.VERSION < (1, 7):
+    if django.VERSION < (1, 7):
+        # for django < 1.7, we only generate south migrations
 
         # south itself is not required here, but trying to import it will raise
         # an ImportError if it is not available
         try:
             import south
         except ImportError as e:
-            if django.VERSION < (1, 7):
-                raise ImportError(
-                    'Could not import south and running Django < 1.7. '
-                    'No migrations could be generated.'
-                )
-            elif use_south:
-                raise e
+            raise ImportError(
+                'Could not import south and running Django < 1.7. '
+                'No migrations could be generated.'
+            )
 
-        if isinstance(settings, dict):
-            # adds south to INSTALLED_APPS if we're using minimal settings
-            settings['INSTALLED_APPS'] = settings.get('INSTALLED_APPS', ()) \
-                                         + ('south',)
+        make_south_migrations(settings, args + sys_argv)
 
-        # use --auto flag if --init flag was not provided
-        sys.argv.append(south_init or '--auto')
+    else:
+        # for django >= 1.7, we generate django migrations, and possibly
+        # south migrations as well by launching a secondary script in a
+        # separate process
 
-        # generate south migrations
-        manage_main(settings, 'schemamigration', *args)
+        dj16script = kwargs.pop('dj16script', False)
+        if dj16script:
+            # launch secondary dj16/south script with command line args
+
+            # south itself is not required here, but trying to import it will
+            # raise a warning
+            try:
+                import south
+            except ImportError as e:
+                raise SouthWarning('Could not import south. '
+                                   'Skipping south migrations generation')
+
+            sys.stderr.write('\nGenerating south migrations\n'
+                             '---------------------------\n\n')
+
+            Popen([dj16script] + sys_argv).wait()
+
+            sys.stderr.write('\nGenerating django migrations\n'
+                             '----------------------------\n\n')
+
+        make_django_migrations(settings, args + sys_argv)

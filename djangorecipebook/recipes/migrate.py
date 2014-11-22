@@ -2,8 +2,6 @@
 Recipe generating a script for database migration
 """
 
-import django
-
 from .manage import AppsRecipe
 
 
@@ -17,6 +15,6 @@ class Recipe(AppsRecipe):
 
     def _packages(self):
         pkgs = ['djangorecipebook']
-        if django.VERSION < (1, 7):
+        if self.django_version < (1, 7):
             pkgs.append('djangorecipebook[south]')
         return pkgs

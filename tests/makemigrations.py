@@ -15,16 +15,18 @@ from django.core.exceptions import ImproperlyConfigured
 
 from ._base import ScriptTests, RecipeTests
 
-from djangorecipebook.scripts.makemigrations import main
+from djangorecipebook.scripts.makemigrations import main, SouthWarning
 from djangorecipebook.recipes.makemigrations import Recipe
 
 
 class MigrationScriptTests(ScriptTests):
 
-    @mock.patch('sys.argv', ['makemigrations'])
+    @mock.patch('sys.argv', ['makemigrations', 'app3'])
+    @mock.patch('sys.stderr', open(os.devnull, 'w'))
+    @mock.patch('djangorecipebook.scripts.makemigrations.Popen')
     @mock.patch('django.conf.LazySettings.configure')
     @mock.patch('django.core.management.execute_from_command_line')
-    def test_script(self, mock_execute, mock_configure):
+    def test_script(self, mock_execute, mock_configure, mock_popen):
         # The manage script is a replacement for the default manage.py
         # script. It has all the same bells and whistles since all it
         # does is call the normal Django stuff.
@@ -35,69 +37,80 @@ class MigrationScriptTests(ScriptTests):
         if not south_installed:
             sys.modules['south'] = mock.Mock()
 
-        main({}, *apps, use_south=True)
+        main({}, *apps, dj16script='dj16south_script')
 
         if not south_installed:
             sys.modules.pop('south')
 
         if django.VERSION >= (1, 7):
-            # calling makemigrations
-            self.assertListEqual(mock_execute.call_args_list[0][0][0],
+            # check that Popen has been called with the script address
+            # this is supposed to call south's schemamigration command
+            self.assertListEqual(mock_popen.call_args[0][0],
+                                 ['dj16south_script', 'app3'])
+
+            # calling django's makemigrations
+            self.assertListEqual(mock_execute.call_args[0][0],
                                  ['manage.py', 'makemigrations',
-                                  'app1', 'app2'])
+                                  'app1', 'app2', 'app3'])
             self.assertTupleEqual(
-                mock_configure.call_args_list[0][1]['INSTALLED_APPS'],
+                mock_configure.call_args[1]['INSTALLED_APPS'],
                 ('django.contrib.admin',
                  'django.contrib.auth',
                  'django.contrib.contenttypes',
                  'django.contrib.sessions',
                  'django.contrib.messages',
                  'django.contrib.staticfiles'))
+        else:
+            # calling only south's schemamigration
+            self.assertListEqual(mock_execute.call_args[0][0],
+                                 ['manage.py', 'schemamigration',
+                                  'app1', 'app2', 'app3', '--auto'])
+            self.assertTupleEqual(
+                mock_configure.call_args[1]['INSTALLED_APPS'],
+                ('django.contrib.admin',
+                 'django.contrib.auth',
+                 'django.contrib.contenttypes',
+                 'django.contrib.sessions',
+                 'django.contrib.messages',
+                 'django.contrib.staticfiles',
+                 'south'))
 
-        # calling south's schemamigration
-        self.assertListEqual(mock_execute.call_args_list[-1][0][0],
-                             ['manage.py', 'schemamigration', 'app1', 'app2',
-                              '--auto'])
-        self.assertTupleEqual(
-            mock_configure.call_args_list[-1][1]['INSTALLED_APPS'],
-            ('django.contrib.admin',
-             'django.contrib.auth',
-             'django.contrib.contenttypes',
-             'django.contrib.sessions',
-             'django.contrib.messages',
-             'django.contrib.staticfiles',
-             'south'))
-
-    @mock.patch('sys.argv', ['makemigrations', '--init'])
+    @mock.patch('sys.argv', ['makemigrations', '--initial'])
+    @mock.patch('sys.stderr', open(os.devnull, 'w'))
+    @mock.patch('djangorecipebook.scripts.makemigrations.Popen')
     @mock.patch('django.conf.LazySettings.configure')
     @mock.patch('django.core.management.execute_from_command_line')
-    def test_script_init(self, mock_execute, mock_configure):
-        # with --init flag
+    def test_script_init(self, mock_execute, mock_configure, mock_popen):
+        # with --initial flag
 
         # mocks existence of south module
         south_installed = 'south' in sys.modules
         if not south_installed:
             sys.modules['south'] = mock.Mock()
 
-        main({}, use_south=True)
+        main({}, dj16script='dj16south_script')
 
         if not south_installed:
             sys.modules.pop('south')
 
         if django.VERSION >= (1, 7):
-            # calling makemigrations, no '--init' arg
-            self.assertListEqual(mock_execute.call_args_list[0][0][0],
+            # calling dj16 script with --initial
+            self.assertListEqual(mock_popen.call_args[0][0],
+                                 ['dj16south_script', '--initial'])
+            # calling makemigrations, no '--initial' arg
+            self.assertListEqual(mock_execute.call_args[0][0],
                                  ['manage.py', 'makemigrations'])
-
-        # calling south's schemamigration with --init arg
-        self.assertListEqual(mock_execute.call_args_list[-1][0][0],
-                             ['manage.py', 'schemamigration', '--init'])
+        else:
+            # calling south's schemamigration with --initial arg
+            self.assertListEqual(mock_execute.call_args_list[-1][0][0],
+                                 ['manage.py', 'schemamigration', '--initial'])
 
 
 
     @mock.patch('sys.argv', ['makemigrations'])
+    @mock.patch('djangorecipebook.scripts.makemigrations.Popen')
     @mock.patch('django.core.management.execute_from_command_line')
-    def test_script_south_unavailable(self, mock_execute):
+    def test_script_south_unavailable(self, mock_execute, mock_popen):
 
         # monkeypatching __import__ to raise ImportError when importing south
         import0 = builtins.__import__
@@ -108,8 +121,8 @@ class MigrationScriptTests(ScriptTests):
             return import0(name, *args, **kwargs)
         builtins.__import__ = myimport
 
-        with self.assertRaises(ImportError):
-            main('settings', use_south=True)
+        with self.assertRaises((ImportError, SouthWarning)):
+            main('settings', dj16script='dj16south_script')
 
         builtins.__import__ = import0
 
@@ -166,18 +179,11 @@ class MakeMigrationsRecipeTests(RecipeTests):
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
                 return_value=(None, []))
-    def test_install_with_south(self, working_set):
-        # Apps - but no settings file - are provided, a minimal settings file
-        # is generated in the parts directory
-        self.init_recipe({'settings': 'settings'})
-        inst_apps = ('app1', 'app2')
-        apps = ('app3',)
-        self.init_recipe({'inst_apps': '\n    '.join(inst_apps),
-                          'apps': '\n    '.join(apps)})
+    def test_packages_with_dj17_and_south(self, working_set):
+        # south is set
+        self.init_recipe({'settings': 'settings',
+                          'south': '1'})
+
         self.recipe.install()
+
         migrations_script = self.script_path('makemigrations')
-        script_cat = self.script_cat(migrations_script)
-        self.assertIn("djangorecipebook.scripts.makemigrations"
-                      ".main(added_settings, 'app3')", script_cat)
-        self.assertIn("{'INSTALLED_APPS': ('app1', 'app2', 'app3')}",
-                      script_cat)

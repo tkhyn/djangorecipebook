@@ -21,6 +21,10 @@ class BaseRecipe(object):
 
         # extraction of buildout parameters
         options['bin_dir'] = self.buildout['buildout']['bin-directory']
+        options['part_dir'] = os.path.join(
+            self.buildout['buildout']['parts-directory'],
+            'djangorecipebook'
+        )
 
         # extraction of common options
         proj_dir = options.get('project-dir', '.')
@@ -39,6 +43,12 @@ class BaseRecipe(object):
         options['extra-paths'] = ';'.join(extra_paths)
 
         options.setdefault('envvars', '')
+
+        try:
+            self.django_version = \
+                tuple(map(int, self.buildout.versions['django'].split(".")))
+        except KeyError:
+            self.django_version = (999,)  # latest
 
     def _initialization(self):
         init = self.options['initialization']

@@ -5,6 +5,7 @@ Recipe generating a management script
 import sys
 
 from zc.buildout import easy_install
+
 from django.core.exceptions import ImproperlyConfigured
 
 from .base import BaseRecipe
@@ -28,6 +29,10 @@ class Recipe(BaseRecipe):
             apps = self.options_to_list('apps')
             inst_apps.extend(set(apps).difference(inst_apps))
             self.added_settings['INSTALLED_APPS'] = tuple(inst_apps)
+
+    @property
+    def script_path(self):
+        return self.__class__.__module__.replace('recipes', 'scripts')
 
     def _arguments(self):
         """
@@ -59,9 +64,8 @@ class Recipe(BaseRecipe):
                 'Cannot define a settings module and a list of installed apps')
 
         __, working_set = self.egg.working_set(self._packages())
-        script_path = self.__class__.__module__.replace('recipes', 'scripts')
         return easy_install.scripts(
-            [(self.name, script_path, 'main')],
+            [(self.name, self.script_path, 'main')],
             working_set, sys.executable, self.options['bin_dir'],
             extra_paths=self.options['extra-paths'].split(';'),
             arguments=self._arguments(),
