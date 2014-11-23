@@ -6,13 +6,12 @@ Also runs south's 'schemamigration' if applicable
 import sys
 from subprocess import Popen
 
-import django
-
 from .manage import manage_main
 
 
 class SouthWarning(Warning):
     pass
+
 
 def make_django_migrations(settings, args):
     # remove any south-specific flag from args
@@ -48,6 +47,7 @@ def main(settings, *args, **kwargs):
 
     args = list(args)
 
+    import django
     if django.VERSION < (1, 7):
         # for django < 1.7, we only generate south migrations
 

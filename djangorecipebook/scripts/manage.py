@@ -4,9 +4,6 @@ Calls django's management script
 
 import sys
 
-from django.conf import settings as dj_settings
-from django.utils.six import string_types
-
 
 DEFAULT_SETTINGS = dict(
     SECRET_KEY='secret',
@@ -28,13 +25,15 @@ DEFAULT_SETTINGS = dict(
 
 
 def manage_main(settings, command, *args):
-    from django.core import management
 
     settings_arg = []
     for arg in sys.argv:
         if arg.startswith('--settings='):
             break
     else:
+        from django.conf import settings as dj_settings
+        from django.utils.six import string_types
+
         if isinstance(settings, string_types):
             settings_arg = ['--settings=' + settings]
         else:
@@ -60,8 +59,10 @@ def manage_main(settings, command, *args):
     # the arguments need to be inserted in sys.argv as subsequent packages
     # (e.g. nose) may use sys.argv and forget about what is passed to manage.py
     sys.argv[1:1] = args
-    management.execute_from_command_line(['manage.py'] + command +
-                                         settings_arg + sys.argv[1:])
+
+    from django.core.management import execute_from_command_line
+    execute_from_command_line(['manage.py'] + command +
+                              settings_arg + sys.argv[1:])
 
 
 def main(settings, *args):
