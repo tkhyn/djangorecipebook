@@ -49,7 +49,9 @@ class GeneralRecipeTests(RecipeTests):
         # When an init code is specified, it should be added to the script
         self.init_recipe({'initialization': 'import os\nassert True'})
         self.recipe.install()
-        self.assertIn('import os\nassert True\n\nadded_settings = {}\n\nimport djangorecipebook',
+        self.assertIn('import os\nassert True\n\n'
+                      'added_settings = {}\n\n'
+                      'import djangorecipebook',
                       self.script_cat('manage'))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',

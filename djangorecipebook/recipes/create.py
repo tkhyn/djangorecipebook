@@ -126,11 +126,9 @@ class Recipe(BaseRecipe):
             settings.configure()
 
             # run management command
-            from django.core import management
-            management.execute_from_command_line(['django-admin.py',
-                                                  'startproject',
-                                                  self.name,
-                                                  temp_dir])
+            from django.core.management import execute_from_command_line
+            execute_from_command_line(['django-admin.py', 'startproject',
+                                       self.name, temp_dir])
 
             # copy the generated files (except manage.py) in the project
             # directory

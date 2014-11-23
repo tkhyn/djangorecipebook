@@ -81,7 +81,9 @@ class WSGIRecipeTests(RecipeTests):
         # When an init code is specified, it should be added to the script
         self.init_recipe({'initialization': 'import os\nassert True'})
         self.recipe.install()
-        self.assertIn('import os\nassert True\n\nimport djangorecipebook',
+        self.assertIn('import os\n'
+                      'assert True\n\n'
+                      'import djangorecipebook',
                       self.script_cat('wsgi'))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',

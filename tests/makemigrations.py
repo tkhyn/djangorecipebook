@@ -9,7 +9,6 @@ except ImportError:
     import __builtin__ as builtins
 
 import mock
-
 import django
 from django.core.exceptions import ImproperlyConfigured
 
