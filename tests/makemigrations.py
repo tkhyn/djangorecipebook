@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 
 try:
     # python 3
@@ -14,7 +15,8 @@ from django.core.exceptions import ImproperlyConfigured
 
 from ._base import ScriptTests, RecipeTests
 
-from djangorecipebook.scripts.makemigrations import main, SouthWarning
+from djangorecipebook.scripts.makemigrations \
+    import main, SouthWarning, make_south_from_dj17
 from djangorecipebook.recipes.makemigrations import Recipe
 
 
@@ -121,7 +123,7 @@ class MigrationScriptTests(ScriptTests):
         builtins.__import__ = myimport
 
         with self.assertRaises((ImportError, SouthWarning)):
-            main('settings', dj16script='dj16south_script')
+            make_south_from_dj17('settings')
 
         builtins.__import__ = import0
 
@@ -132,6 +134,11 @@ class MakeMigrationsRecipeTests(RecipeTests):
     recipe_class = Recipe
     recipe_name = 'makemigrations'
     recipe_options = {'recipe': 'djangorecipebook:makemigrations'}
+
+    def tearDown(self):
+        parts_dir = self.recipe.buildout['buildout']['parts-directory']
+        if os.path.isdir(parts_dir):
+            shutil.rmtree(parts_dir)
 
     def test_consistent_options(self):
         options_1 = self.recipe.options
