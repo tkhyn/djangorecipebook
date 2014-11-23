@@ -20,14 +20,14 @@ from djangorecipebook.scripts.makemigrations \
 from djangorecipebook.recipes.makemigrations import Recipe
 
 
+@mock.patch('sys.stderr', open(os.devnull, 'w'))
 class MigrationScriptTests(ScriptTests):
 
     @mock.patch('sys.argv', ['makemigrations', 'app3'])
-    @mock.patch('sys.stderr', open(os.devnull, 'w'))
     @mock.patch('djangorecipebook.scripts.makemigrations.Popen')
     @mock.patch('django.conf.LazySettings.configure')
     @mock.patch('django.core.management.execute_from_command_line')
-    def test_script(self, mock_execute, mock_configure, mock_popen):
+    def test_main(self, mock_execute, mock_configure, mock_popen):
         # The manage script is a replacement for the default manage.py
         # script. It has all the same bells and whistles since all it
         # does is call the normal Django stuff.
@@ -77,11 +77,10 @@ class MigrationScriptTests(ScriptTests):
                  'south'))
 
     @mock.patch('sys.argv', ['makemigrations', '--initial'])
-    @mock.patch('sys.stderr', open(os.devnull, 'w'))
     @mock.patch('djangorecipebook.scripts.makemigrations.Popen')
     @mock.patch('django.conf.LazySettings.configure')
     @mock.patch('django.core.management.execute_from_command_line')
-    def test_script_init(self, mock_execute, mock_configure, mock_popen):
+    def test_main_initial(self, mock_execute, mock_configure, mock_popen):
         # with --initial flag
 
         # mocks existence of south module
@@ -105,7 +104,6 @@ class MigrationScriptTests(ScriptTests):
             # calling south's schemamigration with --initial arg
             self.assertListEqual(mock_execute.call_args_list[-1][0][0],
                                  ['manage.py', 'schemamigration', '--initial'])
-
 
 
     @mock.patch('sys.argv', ['makemigrations'])
