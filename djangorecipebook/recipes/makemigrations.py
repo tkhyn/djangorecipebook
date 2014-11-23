@@ -50,7 +50,7 @@ class Recipe(AppsRecipe):
             __, working_set = self.egg.working_set(self._packages() +
                                                    ['djangorecipebook[south]'])
             easy_install.scripts(
-                [(name, self.script_path, 'main')],
+                [(name, self.script_path, 'make_south_from_dj17')],
                 working_set, sys.executable, self.options['part_dir'],
                 extra_paths=self.options['extra-paths'].split(';'),
                 arguments=super(Recipe, self)._arguments(),
