@@ -6,9 +6,8 @@ import sys
 
 from zc.buildout import easy_install
 
-from django.core.exceptions import ImproperlyConfigured
-
 from .base import BaseRecipe
+from ..exceptions import ImproperlyConfigured
 
 
 class Recipe(BaseRecipe):

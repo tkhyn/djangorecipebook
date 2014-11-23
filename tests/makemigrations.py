@@ -11,13 +11,13 @@ except ImportError:
 
 import mock
 import django
-from django.core.exceptions import ImproperlyConfigured
 
 from ._base import ScriptTests, RecipeTests
 
 from djangorecipebook.scripts.makemigrations \
     import main, SouthWarning, make_south_from_dj17
 from djangorecipebook.recipes.makemigrations import Recipe
+from djangorecipebook.exceptions import ImproperlyConfigured
 
 
 @mock.patch('sys.stderr', open(os.devnull, 'w'))
