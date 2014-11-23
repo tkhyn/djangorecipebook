@@ -5,6 +5,7 @@ Also runs south's 'schemamigration' if applicable
 
 import sys
 from subprocess import Popen
+from importlib import import_module
 
 from .manage import manage_main
 
@@ -30,8 +31,13 @@ def make_south_migrations(settings, args):
         # default mode is 'auto'
         args.append('--auto')
 
-    if isinstance(settings, dict):
-        # adds south to INSTALLED_APPS if we're using minimal settings
+    if not isinstance(settings, dict):
+        # converting settings to a dictionary, so that we can add south in
+        # INSTALLED_APPS if needed (indeed, when this script is called from
+        # a django 1.7 installation, south is not in INSTALLED_APPS)
+        settings = import_module(settings).__dict__
+
+    if 'south' not in settings.get('INSTALLED_APPS', ()):
         settings['INSTALLED_APPS'] = settings.get('INSTALLED_APPS', ()) \
                                      + ('south',)
 
