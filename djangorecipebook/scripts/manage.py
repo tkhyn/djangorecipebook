@@ -40,8 +40,10 @@ def manage_main(settings, command, *args):
             # using default settings, eventually amended
             if isinstance(settings, dict):
                 new_settings = dict(DEFAULT_SETTINGS)  # make a copy
-                new_settings['INSTALLED_APPS'] += \
-                    settings.pop('INSTALLED_APPS', ())
+                inst_apps = settings.get('INSTALLED_APPS', ())
+                settings['INSTALLED_APPS'] = \
+                    tuple([app for app in DEFAULT_SETTINGS['INSTALLED_APPS']
+                           if app not in inst_apps]) + inst_apps
                 new_settings.update(settings)
             else:
                 new_settings = DEFAULT_SETTINGS

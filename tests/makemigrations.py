@@ -11,17 +11,20 @@ except ImportError:
 
 import mock
 import django
+from django.utils.six import iteritems
 
 from ._base import ScriptTests, RecipeTests
 
 from djangorecipebook.scripts.makemigrations \
-    import main, SouthWarning, make_south_from_dj17
+    import main, make_south_migrations, make_south_from_dj17, SouthWarning
 from djangorecipebook.recipes.makemigrations import Recipe
 from djangorecipebook.exceptions import ImproperlyConfigured
 
 
-@mock.patch('sys.stderr', open(os.devnull, 'w'))
+@mock.patch('sys.stdout', open(os.devnull, 'w'))
 class MigrationScriptTests(ScriptTests):
+
+    maxDiff = None
 
     @mock.patch('sys.argv', ['makemigrations', 'app3'])
     @mock.patch('djangorecipebook.scripts.makemigrations.Popen')
@@ -102,7 +105,7 @@ class MigrationScriptTests(ScriptTests):
                                  ['manage.py', 'makemigrations'])
         else:
             # calling south's schemamigration with --initial arg
-            self.assertListEqual(mock_execute.call_args_list[-1][0][0],
+            self.assertListEqual(mock_execute.call_args[0][0],
                                  ['manage.py', 'schemamigration', '--initial'])
 
 
@@ -125,6 +128,48 @@ class MigrationScriptTests(ScriptTests):
 
         builtins.__import__ = import0
 
+
+    @mock.patch('sys.argv', ['makemigrations'])
+    @mock.patch('os.rename')
+    @mock.patch('django.conf.LazySettings.configure')
+    @mock.patch('django.core.management.execute_from_command_line')
+    def test_make_south(self, mock_execute, mock_configure, mock_rename):
+
+        make_south_migrations('tests.mig_project.settings', [], south_dir=True)
+
+        projpath = os.path.join(os.path.dirname(__file__),
+                                    'mig_project')
+
+        self.assertTupleEqual(mock_rename.call_args[0],
+            (os.path.join(projpath, 'migrated_with_south', 'migrations'),
+             os.path.join(projpath, 'migrated_with_south', 'south_migrations'))
+        )
+
+        from tests.mig_project import settings
+        settings_dict = dict([(k, v) for k, v in iteritems(settings.__dict__)
+                              if k.isupper()])
+
+        settings_dict['INSTALLED_APPS'] += ('south',)
+        settings_dict['SOUTH_MIGRATION_MODULES'] = {
+            'tests.mig_project.migrated_with_dj17':
+                'tests.mig_project.migrated_with_dj17.south_migrations',
+            'tests.mig_project.unmigrated':
+                'tests.mig_project.unmigrated.south_migrations',
+        }
+
+        self.assertDictEqual(mock_configure.call_args[1], settings_dict)
+
+        self.assertListEqual(mock_execute.call_args_list[0][0][0][:3],
+                             ['manage.py', 'schemamigration', '--initial'])
+        self.assertSetEqual(set(mock_execute.call_args_list[0][0][0][3:]),
+                            set(['tests.mig_project.migrated_with_dj17',
+                                 'tests.mig_project.unmigrated']))
+
+        self.assertListEqual(mock_execute.call_args_list[1][0][0][:3],
+                             ['manage.py', 'schemamigration', '--auto'])
+        self.assertSetEqual(set(mock_execute.call_args_list[1][0][0][3:]),
+                            set(['tests.mig_project.migrated_with_both',
+                                 'tests.mig_project.migrated_with_south']))
 
 
 class MakeMigrationsRecipeTests(RecipeTests):

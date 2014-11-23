@@ -7,10 +7,12 @@ import os
 import sys
 from subprocess import Popen
 from importlib import import_module
-import imp
 import shutil
 
+from django.utils.six import iteritems
+
 from .manage import manage_main
+from ..helpers import find_module_path, get_migrations_type
 
 
 class SouthWarning(Warning):
@@ -19,7 +21,7 @@ class SouthWarning(Warning):
 
 def make_django_migrations(settings, args):
 
-    sys.stderr.write('\nGenerating django migrations\n'
+    sys.stdout.write('\nGenerating django migrations\n'
                      '----------------------------\n\n')
 
     # remove any south-specific flag from args
@@ -31,7 +33,7 @@ def make_django_migrations(settings, args):
 
 def make_south_migrations(settings, args, south_dir=False):
 
-    sys.stderr.write('\nGenerating south migrations\n'
+    sys.stdout.write('\nGenerating south migrations\n'
                      '---------------------------\n\n')
 
     # remove any django-specific flag from args
@@ -52,50 +54,42 @@ def make_south_migrations(settings, args, south_dir=False):
         # a django 1.7 installation, south is not in INSTALLED_APPS)
         # there should be no problems while importing a settings module, as
         # it should not depend on django's internals
-        settings = import_module(settings).__dict__
+        settings = dict([(k, v)
+            for k, v in iteritems(import_module(settings).__dict__)
+            if k.isupper()])
 
-    if 'south' not in settings.get('INSTALLED_APPS', ()):
-        settings['INSTALLED_APPS'] = settings.get('INSTALLED_APPS', ()) \
-                                     + ('south',)
+    inst_apps = settings.get('INSTALLED_APPS', ())
+    if 'south' not in inst_apps:
+        settings['INSTALLED_APPS'] = inst_apps + ('south',)
 
     south_mig_modules = settings.setdefault('SOUTH_MIGRATION_MODULES', {})
 
-    inst_apps = settings['INSTALLED_APPS']
-    apps_to_migrate = set(inst_apps).intersection(args)
+    apps_to_migrate = set([app for app
+                           in (set(inst_apps).intersection(args) or inst_apps)
+                           if not app.startswith('django')])
+
     apps_to_init = set(apps_to_migrate if '--initial' in args else [])
 
     # if in 'automatic auto' mode, gather the apps that need to be initialized
     if auto_auto or south_dir:
         for app in list(apps_to_migrate):
             # 1. find the app location path
-            app_py_path = app.split('.')
-            app_py_path.reverse()
-            path = imp.find_module(app_py_path.pop())[1]
-            while app_py_path:
-                path = os.path.join(path, app_py_path.pop())
+            path = find_module_path(app)
 
-            # 2. check if the 'migration' or 'south_migration' subpackages
-            # contain south migrations
-
-            south_mig_pkg = None
-
-            for subpkg in ('migrations', 'south_migrations'):
-                mig_path = os.path.join(path, subpkg)
-
-                if os.path.isfile(os.path.join(mig_path, '__init__.py')):
-                    # there is a migration subpackage, look for the first
-                    # migration file
-                    for f in os.listdir(mig_path):
-                        if f.endswith('.py') and f != '__init__.py':
-                            # migration found, check if it is a south migration
-                            mig = open(os.path.join(mig_path, f))
-                            found_mig = 'from south.db import db' in mig.read()
-                            mig.close()
-                            break
-                    else:
-                        found_mig = False
-
-                    if found_mig:
+            # 2. attempt to retrieve the migration module for the app, either
+            # from SOUTH_MIGRATION_MODULES or from default locations
+            mig_path = ()
+            app_mig_pkg = south_mig_modules.get(app, '')
+            if app_mig_pkg:
+                # from SOUTH_MIGRATION_MODULES
+                mig_path = find_module_path(app_mig_pkg)
+                if get_migrations_type(mig_path) == 'south':
+                    south_mig_pkg = app_mig_pkg
+            else:
+                south_mig_pkg = None
+                for subpkg in ('migrations', 'south_migrations'):
+                    mig_path = os.path.join(path, subpkg)
+                    if get_migrations_type(mig_path) == 'south':
                         south_mig_pkg = subpkg
                         break
 
@@ -104,12 +98,12 @@ def make_south_migrations(settings, args, south_dir=False):
                 if auto_auto:
                     apps_to_init.add(app)
                     apps_to_migrate.discard(app)
-                if south_dir:
+                if south_dir and not app_mig_pkg:
                     south_mig_modules[app] = app + '.south_migrations'
             else:
                 apps_to_init.discard(app)
                 apps_to_migrate.add(app)
-                if south_mig_pkg == 'migrations' and south_dir:
+                if south_dir and south_mig_pkg == 'migrations':
                     # if we want the south migrations to be in
                     # their own south_migrations directory, move them
                     south_mig_path = os.path.join(path, 'south_migrations')
@@ -123,15 +117,25 @@ def make_south_migrations(settings, args, south_dir=False):
             if not a in south_flags \
             and (a.startswith('-') or not a in inst_apps or a in apps_to_init):
                 init_args.append(a)
-        manage_main(settings, 'schemamigration', '--init', *init_args)
+        for a in apps_to_init:
+            if not a in init_args:
+                init_args.append(a)
+        manage_main(settings, 'schemamigration', '--initial', *init_args)
 
-    if apps_to_migrate:
-        migrate_args = []
-        for a in args:
-            if a.startswith('-') or not a in inst_apps or a in apps_to_migrate:
-                migrate_args.append(a)
-        manage_main(None if apps_to_init else settings, 'schemamigration',
-                    *migrate_args)
+    if not apps_to_migrate:
+        apps_to_migrate = inst_apps
+    migrate_args = []
+    for a in args:
+        if a.startswith('-') or not a in inst_apps or a in apps_to_migrate:
+            migrate_args.append(a)
+    for a in apps_to_migrate:
+        if not a in migrate_args:
+            migrate_args.append(a)
+
+    # sys.argv may have been modified in the 1st call to manage_main
+    sys.argv = sys.argv[:1]
+    manage_main(None if apps_to_init else settings, 'schemamigration',
+                *migrate_args)
 
 
 def make_south_from_dj17(settings, *args):
