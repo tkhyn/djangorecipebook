@@ -28,7 +28,7 @@ setup(
     name=name,
     version=__version__,
     description='Buildout recipes for django development',
-    long_description=open(os.path.join('README.rst')).read(),
+    long_description=open('README.rst').read(),
     author='Thomas Khyn',
     author_email='thomas@ksytek.com',
     url='https://bitbucket.org/tkhyn/djangorecipebook/',
@@ -47,10 +47,6 @@ setup(
         'Topic :: Software Development :: Build Tools',
     ],
     packages=find_packages(exclude=('tests',)),
-    include_package_data=True,
-    package_data={
-        '': ['LICENSE.txt', 'README.rst', 'CHANGES.rst']
-    },
     entry_points={'zc.buildout':
         ['%(recipe)s = %(name)s.recipes.%(recipe)s:Recipe' %
             {'recipe': recipe, 'name': name} for recipe
