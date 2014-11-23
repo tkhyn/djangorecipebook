@@ -26,17 +26,17 @@ DEFAULT_SETTINGS = dict(
 
 def manage_main(settings, command, *args):
 
+    from django.conf import settings as dj_settings
+    from django.utils.six import string_types
+
     settings_arg = []
     for arg in sys.argv:
         if arg.startswith('--settings='):
             break
     else:
-        from django.conf import settings as dj_settings
-        from django.utils.six import string_types
-
         if isinstance(settings, string_types):
             settings_arg = ['--settings=' + settings]
-        else:
+        elif isinstance(settings, dict):
             # using default settings, eventually amended
             if isinstance(settings, dict):
                 new_settings = dict(DEFAULT_SETTINGS)  # make a copy
