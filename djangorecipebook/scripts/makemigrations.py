@@ -18,6 +18,10 @@ class SouthWarning(Warning):
 
 
 def make_django_migrations(settings, args):
+
+    sys.stderr.write('\nGenerating django migrations\n'
+                     '----------------------------\n\n')
+
     # remove any south-specific flag from args
     for arg in reversed(args):
         if arg in ('--initial', '--auto', '--update'):
@@ -26,6 +30,10 @@ def make_django_migrations(settings, args):
 
 
 def make_south_migrations(settings, args, south_dir=False):
+
+    sys.stderr.write('\nGenerating south migrations\n'
+                     '---------------------------\n\n')
+
     # remove any django-specific flag from args
     for arg in reversed(args):
         if arg in ('--dry-run', '--merge', '--name'):
@@ -173,16 +181,6 @@ def main(settings, *args, **kwargs):
         dj16script = kwargs.pop('dj16script', False)
         if dj16script:
             # launch secondary dj16/south script with command line args
-
-            # south itself is not required here, but trying to import it will
-            # raise a warning
-
-            sys.stderr.write('\nGenerating south migrations\n'
-                             '---------------------------\n\n')
-
             Popen([dj16script] + sys_argv).wait()
-
-            sys.stderr.write('\nGenerating django migrations\n'
-                             '----------------------------\n\n')
 
         make_django_migrations(settings, args + sys_argv)
