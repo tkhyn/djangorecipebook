@@ -12,12 +12,12 @@ About
 The recipes available in djangorecipebook are mostly derived from
 djangorecipe_'s functionalities. However, while djangorecipe aims at generating
 all scripts in one part, djangorecipebook enables you to define one part per
-script (create, manage, wsgi, test, make), hence allowing the use of different
-settings and/or eggs for each part.
+script (create, manage, wsgi, test, makemigrations), hence allowing the use of
+different settings and/or eggs for each part.
 
 Through its automatic minimal settings generation, djangorecipebook is
 particularly adapted to reusable apps development, e.g. for testing or
-generating migrations.
+generating migrations with `Django 1.7+`_, south_ or both.
 
 djangorecipebook works with django 1.4 to 1.7 and relevant python versions
 (2.6 to 3.4, depending on django version).
@@ -172,9 +172,11 @@ apps
 
 south
    If this option has a value, south_ migrations will also be generated when
-   using Django 1.7+ (and ``south`` will be installed in your buildout
-   environment). This option has no effect with Django < 1.7, where ``south``
-   migrations will always be generated and ``south`` will always be installed.
+   using Django 1.7+ (behind the scenes, djangorecipebook installs django 1.6.x
+   and south distributions and links them in a separate script that can be
+   found in the parts/djangorecipeboook directory). This option has no effect
+   with Django < 1.7, where ``south`` migrations will always be generated and
+   ``south`` will always be installed if you are using this recipe.
 
    Defaults to ``undefined`` (no south migrations generation).
 
@@ -182,24 +184,31 @@ south
 The ``makemigrations`` recipe will generate:
 
 - Django 1.7+ migrations if you are using Django 1.7+
-- south_ migrations if:
+- and/or south_ migrations if:
    - you are using Django 1.7+ and provide a value for the ``south`` option
    - or you are using Django < 1.7, whatever the value of the ``south`` option
 
-When using south migrations, the ``--initial`` command line option can be provided
-when invoking the script. ``--initial`` has no effect whatsoever on Django 1.7+
-migrations.
+When generating south migrations, the ``--initial`` flag can be provided when
+invoking the script from the command line. ``--initial`` has no effect
+whatsoever on Django 1.7+ migrations.
+
+Additionally, djangorecipebook will detect the apps where south migrations must
+be initialised, and automatically add the ``--auto``. That means you do not
+have to worry anymore about providing ``--auto`` or ``--initial`` flags.
+
+If you are using Django 1.7+ and have south_ migrations in the
+``app.migrations`` package, djangorecipebook will automatically rename this
+existing package to ``app.south_migrations`` and place the Django 1.7+
+migrations in ``app.migrations``. From south 1.0.0, south migrations placed
+in the ``south_migrations`` module are detected.
 
 
 Migrate options
 ...............
 
-See `Test options`_. The only difference is that you cannot use minimal
-settings (the default is ``'settings'``) nor the ``inst_apps`` option. Indeed,
-migration generally requires a database to be setup.
-
-If you use this recipe with django < 1.7 in your environment / buildout
-configuration, south_ will be installed.
+Same options as in `Test options`_. The only difference is that you cannot use
+minimal settings (the default is ``'settings'``) nor the ``inst_apps`` option.
+Indeed, migrations generally need a database to migrate!
 
 
 Create options
@@ -316,3 +325,4 @@ will be ``mynewproject_parameters``.
 .. _nose: http://nose.readthedocs.org/en/latest/
 .. _django_nose: https://pypi.python.org/pypi/django-nose
 .. _south: http://south.readthedocs.org
+.. _`Django 1.7+`: https://docs.djangoproject.com/en/dev/topics/migrations/
