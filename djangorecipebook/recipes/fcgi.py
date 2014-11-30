@@ -90,6 +90,8 @@ class Recipe(BaseRecipe):
             arguments=self._arguments(),
             initialization=self._initialization())
 
+        easy_install.script_template = _script_template
+
         if self.options['script_path']:
             dest = os.path.normpath(os.path.join(self.options['root_dir'],
                                                  self.options['script_path']))
@@ -105,8 +107,7 @@ class Recipe(BaseRecipe):
             if not os.path.isdir(os.path.dirname(dest)):
                 os.makedirs(os.path.dirname(dest))
             shutil.move(src, dest)
-
-        easy_install.script_template = _script_template
+            script = [dest]
 
         return script
 
