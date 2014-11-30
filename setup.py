@@ -22,6 +22,17 @@ DEV_STATUS = {'pre': '2 - Pre-Alpha',
               'rc': '4 - Beta',
               'final': '5 - Production/Stable'}
 
+install_requires = [
+    'zc.buildout',
+    'zc.recipe.egg',
+    'django>=1.4',
+]
+
+try:
+    import importlib
+except ImportError:
+    install_requires.append('importlib')
+
 # setup function parameters
 name = 'djangorecipebook'
 setup(
@@ -54,11 +65,7 @@ setup(
                 'create')]
         + ['default = %s.recipes.manage:Recipe' % name]
     },
-    install_requires=(
-        'zc.buildout',
-        'zc.recipe.egg',
-        'django>=1.4',
-    ),
+    install_requires=install_requires,
     extras_require={
         'nose': ('django_nose',),
         'south': ('south',),

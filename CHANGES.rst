@@ -4,7 +4,7 @@ Changes
 1.3 (dev)
 ---------
 
-
+- Added ``application`` option to ``wsgi`` recipe
 
 
 1.2 (22-11-2014)

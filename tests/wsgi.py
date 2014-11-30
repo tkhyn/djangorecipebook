@@ -13,6 +13,11 @@ from djangorecipebook.scripts.wsgi import main
 from djangorecipebook.recipes.wsgi import Recipe
 
 
+# dummy wsgi application
+def application(environ, start_response):
+    pass
+
+
 class WSGIScriptTests(ScriptTests):
 
     @mock.patch('django.core.wsgi.get_wsgi_application')
@@ -49,6 +54,11 @@ class WSGIScriptTests(ScriptTests):
         handler.flush()
         handler.close()
         os.remove(logfile)
+
+    @mock.patch('os.environ', {'DJANGO_SETTINGS_MODULE': test_settings})
+    def test_custom_application(self):
+        app = main(test_settings, application='tests.wsgi.application')
+        self.assertIs(app, application)
 
 
 class WSGIRecipeTests(RecipeTests):
@@ -170,3 +180,12 @@ class WSGIRecipeTests(RecipeTests):
                               self.script_cat('wsgi'))
         finally:
             shutil.rmtree(workon_home)
+
+    @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
+                return_value=(None, []))
+    def test_application(self, working_set):
+        # tests that the script generates an application argument
+        self.init_recipe({'application': 'application_module.application'})
+        self.recipe.install()
+        self.assertIn("application='application_module.application'",
+                      self.script_cat('wsgi'))

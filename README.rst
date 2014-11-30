@@ -134,6 +134,10 @@ virtualenv
 
    Defaults to ``''``, which disables any virtual environment setup.
 
+application (wsgi only)
+   The path to a user-defined wsgi application.
+
+   Defaults to the result of django's ``get_wsgi_application()``
 
 Test options
 ............

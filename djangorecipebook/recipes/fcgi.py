@@ -32,6 +32,15 @@ class Recipe(BaseRecipe):
 
         options.setdefault('virtualenv', '')
 
+    def _arguments(self):
+        if self.options['log-file']:
+            logfile = (", logfile='%s'" % self.options['log-file'])
+            loglevel = (", level=%s" % self.options['log-level'])
+        else:
+            logfile = loglevel = ''
+
+        return "'%s'%s%s" % (self.options['settings'], logfile, loglevel)
+
     def install(self):
         __, working_set = self.egg.working_set(['djangorecipebook'])
 
@@ -71,19 +80,12 @@ class Recipe(BaseRecipe):
             # we use split to strip the 1st line of _script_template, which
             # is the header
 
-        if self.options['log-file']:
-            logfile = (", logfile='%s'" % self.options['log-file'])
-            loglevel = (", level=%s" % self.options['log-level'])
-        else:
-            logfile = loglevel = ''
-
         module_name = self.__class__.__module__.replace('recipes', 'scripts')
         script = easy_install.scripts(
             [(self.name, module_name, 'main')],
             working_set, sys.executable, self.options['bin_dir'],
             extra_paths=self.options['extra-paths'].split(';'),
-            arguments="'%s'%s%s" % (self.options['settings'],
-                                    logfile, loglevel),
+            arguments=self._arguments(),
             initialization=self._initialization())
 
         easy_install.script_template = _script_template
