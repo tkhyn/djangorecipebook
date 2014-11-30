@@ -5,6 +5,7 @@ Changes
 ---------
 
 - Added ``application`` option to ``wsgi`` recipe
+- Added ``script_path`` option to ``fcgi`` and ``wsgi`` recipes
 
 
 1.2 (22-11-2014)

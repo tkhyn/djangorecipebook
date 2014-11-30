@@ -134,6 +134,12 @@ virtualenv
 
    Defaults to ``''``, which disables any virtual environment setup.
 
+script_path
+   The desired output path of the script, as a path to a filename relative to
+   the buildout directory (= where the ``buildout.cfg`` file lies).
+
+   Defaults to buildout's bin directory with the recipe's name.
+
 application (wsgi only)
    The path to a user-defined wsgi application.
 

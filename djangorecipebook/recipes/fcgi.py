@@ -4,6 +4,7 @@ Base recipe for production scripts generation
 
 import os
 import sys
+import shutil
 import logging
 
 from .base import BaseRecipe
@@ -31,6 +32,7 @@ class Recipe(BaseRecipe):
             options['log-level'] = str(getattr(logging, loglevel))
 
         options.setdefault('virtualenv', '')
+        options.setdefault('script_path', '')
 
     def _arguments(self):
         if self.options['log-file']:
@@ -87,6 +89,22 @@ class Recipe(BaseRecipe):
             extra_paths=self.options['extra-paths'].split(';'),
             arguments=self._arguments(),
             initialization=self._initialization())
+
+        if self.options['script_path']:
+            dest = os.path.normpath(os.path.join(self.options['root_dir'],
+                                                 self.options['script_path']))
+            if sys.platform == 'win32':
+                for s in script:
+                    if s.endswith('.py'):
+                        src = s
+                    else:
+                        # we remove the .exe file
+                        os.remove(s)
+            else:
+                src = script[0]
+            if not os.path.isdir(os.path.dirname(dest)):
+                os.makedirs(os.path.dirname(dest))
+            shutil.move(src, dest)
 
         easy_install.script_template = _script_template
 
