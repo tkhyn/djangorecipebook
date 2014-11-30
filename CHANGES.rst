@@ -22,6 +22,11 @@ Changes
 - Added ``application`` option to ``wsgi`` recipe
 - Added ``script_path`` option to ``fcgi`` and ``wsgi`` recipes
 
+1.2.3 (30-11-2014)
+..................
+
+- Fixed ``script_path`` option edge-cases bugs
+
 
 1.1 (03-08-2014)
 ----------------

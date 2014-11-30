@@ -82,31 +82,37 @@ class Recipe(BaseRecipe):
             # we use split to strip the 1st line of _script_template, which
             # is the header
 
+        if self.options['script_path']:
+            dest = os.path.normpath(os.path.join(self.options['root_dir'],
+                                                 self.options['script_path']))
+            dest_dir, dest_name = os.path.split(dest)
+            if not os.path.isdir(dest_dir):
+                os.makedirs(dest_dir)
+        else:
+            dest_dir = self.options['bin_dir']
+            dest_name = self.name
+
         module_name = self.__class__.__module__.replace('recipes', 'scripts')
         script = easy_install.scripts(
-            [(self.name, module_name, 'main')],
-            working_set, sys.executable, self.options['bin_dir'],
+            [(dest_name, module_name, 'main')],
+            working_set, sys.executable, dest_dir,
             extra_paths=self.options['extra-paths'].split(';'),
             arguments=self._arguments(),
             initialization=self._initialization())
 
-        if self.options['script_path']:
-            dest = os.path.normpath(os.path.join(self.options['root_dir'],
-                                                 self.options['script_path']))
-            if sys.platform == 'win32':
-                for s in script:
-                    if s.endswith('.py'):
-                        src = s
-                    else:
-                        # we remove the .exe file
-                        os.remove(s)
-            else:
-                src = script[0]
-            if not os.path.isdir(os.path.dirname(dest)):
-                os.makedirs(os.path.dirname(dest))
-            shutil.move(src, dest)
-
         easy_install.script_template = _script_template
+
+        if self.options['script_path'] and sys.platform == 'win32':
+            # on windows, the xxx-script.py must be renamed and the .exe
+            # deleted if the script path is provided
+            for s in script:
+                if s.endswith('.py'):
+                    # we rename the .py file
+                    os.rename(s, dest)
+                else:
+                    # we remove the .exe file
+                    os.remove(s)
+            script = [dest]
 
         return script
 
