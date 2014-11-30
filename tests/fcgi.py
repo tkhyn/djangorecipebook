@@ -2,6 +2,7 @@
 # production scripts generation is tested with WSGI
 
 import os
+import sys
 import mock
 
 from ._base import ScriptTests, RecipeTests, test_settings
@@ -10,7 +11,7 @@ from djangorecipebook.scripts.fcgi import  main
 from djangorecipebook.recipes.fcgi import Recipe
 
 
-class WSGIScriptTests(ScriptTests):
+class FCGIScriptTests(ScriptTests):
 
     @mock.patch('django.core.servers.fastcgi.runfastcgi')
     @mock.patch('os.environ', {'DJANGO_SETTINGS_MODULE': test_settings})
@@ -23,7 +24,7 @@ class WSGIScriptTests(ScriptTests):
         mock_fcgi.assert_called_with(method="threaded", daemonize="false")
 
 
-class WSGIRecipeTests(RecipeTests):
+class FCGIRecipeTests(RecipeTests):
 
     recipe_class = Recipe
     recipe_name = 'fcgi'
@@ -45,3 +46,21 @@ class WSGIRecipeTests(RecipeTests):
         self.assertIn("djangorecipebook.scripts.fcgi.main('%s')" % \
                       test_settings,
                       self.script_cat(fcgi_script))
+
+    @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
+                return_value=(None, []))
+    def test_script_path(self, working_set):
+        # Check that the script is installed in the provided custom script path
+        # instead of the bin directory
+        self.init_recipe({'script_path': 'fcgi/app.fcgi'})
+        self.recipe.install()
+        self.assertTrue(os.path.exists(os.path.join(self.buildout_dir,
+                                                   'fcgi/app.fcgi')))
+        if sys.platform == 'win32':
+            self.assertFalse(os.path.exists(os.path.join(self.bin_dir,
+                                                         'fcgi-script.py')))
+            self.assertFalse(os.path.exists(os.path.join(self.bin_dir,
+                                                         'fcgi.exe')))
+        else:
+            self.assertFalse(os.path.exists(os.path.join(self.bin_dir,
+                                                         'fcgi')))

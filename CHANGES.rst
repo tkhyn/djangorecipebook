@@ -1,6 +1,8 @@
 Changes
 =======
 
+
+
 1.2 (22-11-2014)
 ----------------
 
@@ -13,6 +15,12 @@ Changes
 
 - Fixed template directory bug in create recipe
 - Fixed ``makemigrations`` recipe for dual migrations generation
+
+1.2.2 (30-11-2014)
+..................
+
+- Added ``application`` option to ``wsgi`` recipe
+- Added ``script_path`` option to ``fcgi`` and ``wsgi`` recipes
 
 
 1.1 (03-08-2014)

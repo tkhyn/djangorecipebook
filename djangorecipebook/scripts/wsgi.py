@@ -7,6 +7,7 @@ Creates the wsgi application
 import os
 import sys
 import logging
+from importlib import import_module
 
 
 def setup_logging(logfile, level, logger_name):
@@ -36,11 +37,18 @@ def setup_logging(logfile, level, logger_name):
         sys.stderr = StdStrLogger(logger, logging.ERROR)
 
 
-def main(settings_file, logfile=None, level=logging.INFO):
+def main(settings_file, logfile=None, level=logging.INFO, application=None):
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_file)
 
     setup_logging(logfile, level, 'wsgi_outerr_logger')
 
-    # Run WSGI handler for the application
-    from django.core.wsgi import get_wsgi_application
-    return get_wsgi_application()
+    if application is None:
+        # using default application from django core
+        from django.core.wsgi import get_wsgi_application
+        wsgi_app = get_wsgi_application()
+    else:
+        # an application is provided as a path, import it
+        module, app = application.rsplit('.', 1)
+        wsgi_app = getattr(import_module(module), app)
+
+    return wsgi_app

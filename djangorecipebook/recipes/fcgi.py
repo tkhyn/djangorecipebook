@@ -4,6 +4,7 @@ Base recipe for production scripts generation
 
 import os
 import sys
+import shutil
 import logging
 
 from .base import BaseRecipe
@@ -31,6 +32,16 @@ class Recipe(BaseRecipe):
             options['log-level'] = str(getattr(logging, loglevel))
 
         options.setdefault('virtualenv', '')
+        options.setdefault('script_path', '')
+
+    def _arguments(self):
+        if self.options['log-file']:
+            logfile = (", logfile='%s'" % self.options['log-file'])
+            loglevel = (", level=%s" % self.options['log-level'])
+        else:
+            logfile = loglevel = ''
+
+        return "'%s'%s%s" % (self.options['settings'], logfile, loglevel)
 
     def install(self):
         __, working_set = self.egg.working_set(['djangorecipebook'])
@@ -71,20 +82,29 @@ class Recipe(BaseRecipe):
             # we use split to strip the 1st line of _script_template, which
             # is the header
 
-        if self.options['log-file']:
-            logfile = (", logfile='%s'" % self.options['log-file'])
-            loglevel = (", level=%s" % self.options['log-level'])
-        else:
-            logfile = loglevel = ''
-
         module_name = self.__class__.__module__.replace('recipes', 'scripts')
         script = easy_install.scripts(
             [(self.name, module_name, 'main')],
             working_set, sys.executable, self.options['bin_dir'],
             extra_paths=self.options['extra-paths'].split(';'),
-            arguments="'%s'%s%s" % (self.options['settings'],
-                                    logfile, loglevel),
+            arguments=self._arguments(),
             initialization=self._initialization())
+
+        if self.options['script_path']:
+            dest = os.path.normpath(os.path.join(self.options['root_dir'],
+                                                 self.options['script_path']))
+            if sys.platform == 'win32':
+                for s in script:
+                    if s.endswith('.py'):
+                        src = s
+                    else:
+                        # we remove the .exe file
+                        os.remove(s)
+            else:
+                src = script[0]
+            if not os.path.isdir(os.path.dirname(dest)):
+                os.makedirs(os.path.dirname(dest))
+            shutil.move(src, dest)
 
         easy_install.script_template = _script_template
 
