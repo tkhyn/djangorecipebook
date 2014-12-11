@@ -4,7 +4,6 @@ Base recipe for production scripts generation
 
 import os
 import sys
-import shutil
 import logging
 
 from .base import BaseRecipe
@@ -107,7 +106,9 @@ class Recipe(BaseRecipe):
             # deleted if the script path is provided
             for s in script:
                 if s.endswith('.py'):
-                    # we rename the .py file
+                    # we rename the .py file, deleting the existing one if any
+                    if os.path.exists(dest):
+                        os.remove(dest)
                     os.rename(s, dest)
                 else:
                     # we remove the .exe file
