@@ -19,7 +19,7 @@ Through its automatic minimal settings generation, djangorecipebook is
 particularly adapted to reusable apps development, e.g. for testing or
 generating migrations with `Django 1.7+`_, south_ or both.
 
-djangorecipebook works with django 1.4 to 1.7 and relevant python versions
+djangorecipebook works with django 1.4 to 1.8 and relevant python versions
 (2.6 to 3.4, depending on django version).
 
 
