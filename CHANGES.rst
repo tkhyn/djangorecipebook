@@ -32,6 +32,11 @@ Changes
 
 - Fixed fcgi/wsgi existing script file issue on windows
 
+1.2.5 (14-04-2015)
+..................
+
+- Added Django 1.8 support
+
 
 1.1 (03-08-2014)
 ----------------
