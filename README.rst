@@ -1,7 +1,7 @@
 djangorecipebook
 ================
 
-|copyright| 2014 Thomas Khyn
+|copyright| 2014-2015 Thomas Khyn
 
 Buildout recipes for django development
 
