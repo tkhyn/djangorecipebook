@@ -86,7 +86,7 @@ class Recipe(ManageRecipe):
             self.command = options['command']
         except KeyError:
             if options['args']:
-                return ImproperlyConfigured(
+                raise ImproperlyConfigured(
                     'You must provide a command if you provide args to the '
                     'manage recipe.')
 
