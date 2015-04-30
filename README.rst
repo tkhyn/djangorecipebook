@@ -101,6 +101,11 @@ inst_apps
 
    Defaults to ``''``.
 
+command
+   The management command to run, if any.
+
+   Defaults to no command (and in that case the ``args`` option is disabled).
+
 args
    Any command-line argument you wish to have added to the generated script,
    separated by spaces or line-breaks.
@@ -149,7 +154,7 @@ Test options
 ............
 
 settings, inst_apps, args
-   See `Manage options`_.
+   See `Manage options`_. Note that the ``command`` option is disabled.
 
 nose
    Use this option if you are using nose_ (and therefore django_nose_) to test
@@ -170,7 +175,7 @@ Makemigrations options
 ......................
 
 settings, inst_apps, args
-   See `Manage options`_.
+   See `Manage options`_. Note that the ``command`` option is disabled.
 
 apps
    The names of the apps for which migrations should be generated, separated
