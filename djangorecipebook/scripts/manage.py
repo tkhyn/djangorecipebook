@@ -24,7 +24,7 @@ DEFAULT_SETTINGS = dict(
 )
 
 
-def manage_main(settings, command, *args):
+def main(settings, command=None, *args):
 
     from django.conf import settings as dj_settings
     from django.utils.six import string_types
@@ -65,7 +65,3 @@ def manage_main(settings, command, *args):
     from django.core.management import execute_from_command_line
     execute_from_command_line(['manage.py'] + command +
                               settings_arg + sys.argv[1:])
-
-
-def main(settings, *args):
-    manage_main(settings, None, *args)

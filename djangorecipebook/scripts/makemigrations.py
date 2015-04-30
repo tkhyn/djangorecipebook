@@ -11,7 +11,7 @@ import shutil
 
 from django.utils.six import iteritems
 
-from .manage import manage_main
+from .manage import main as manage_main
 from ..helpers import find_module_path, get_migrations_type
 
 

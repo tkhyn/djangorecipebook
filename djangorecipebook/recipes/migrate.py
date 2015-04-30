@@ -7,6 +7,8 @@ from .manage import AppsRecipe
 
 class Recipe(AppsRecipe):
 
+    command = 'migrate'
+
     def __init__(self, buildout, name, options):
         # a settings module is needed, one cannot use minimal settings
         # to migrate a database !

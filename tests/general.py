@@ -61,11 +61,15 @@ class GeneralRecipeTests(RecipeTests):
         # djangorecipebook.test.main is present and has the apps names in the
         # arguments
         args = ('-v', '--no-input')
-        self.init_recipe({'args': '\n    '.join(args)})
+        self.init_recipe({
+            'command': 'command',
+            'args': '\n    '.join(args)
+        })
         self.recipe.install()
         manage_script = self.script_path('manage')
         script_cat = self.script_cat(manage_script)
-        self.assertIn("djangorecipebook.scripts.manage.main(added_settings, %s)"
+        self.assertIn("djangorecipebook.scripts.manage.main(added_settings, "
+                      "'command', %s)"
                       % ', '.join(["'%s'" % arg for arg in args]), script_cat)
         self.assertIn('added_settings = {', script_cat)
 

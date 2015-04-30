@@ -10,14 +10,17 @@ from .base import BaseRecipe
 from ..exceptions import ImproperlyConfigured
 
 
-class Recipe(BaseRecipe):
+class ManageRecipe(BaseRecipe):
+
+    command = None
+    script_path = 'djangorecipebook.scripts.manage'
 
     def _packages(self):
         return ['djangorecipebook']
 
     def __init__(self, buildout, name, options):
         options.setdefault('settings', '')
-        super(Recipe, self).__init__(buildout, name, options)
+        super(ManageRecipe, self).__init__(buildout, name, options)
         options.setdefault('args', '')
 
         inst_apps = options.setdefault('inst_apps', '')
@@ -29,28 +32,27 @@ class Recipe(BaseRecipe):
             inst_apps.extend(set(apps).difference(inst_apps))
             self.added_settings['INSTALLED_APPS'] = tuple(inst_apps)
 
-    @property
-    def script_path(self):
-        return self.__class__.__module__.replace('recipes', 'scripts')
-
     def _arguments(self):
         """
         Returns the list of arguments for the djangorecipebook script
         """
-        args = ''
-        for arg in self.options_to_list('args'):
-            args += ", '%s'" % arg
+        args = []
 
         settings = self.options['settings']
         if settings:
-            settings = "'%s'" % settings
+            args.append("'%s'" % settings)
         else:
-            settings = 'added_settings'  # see self._initialization
+            args.append('added_settings')  # see self._initialization
 
-        return "%s%s" % (settings, args)
+        if self.command is not None:
+            args.append("'%s'" % self.command)
+
+        args += ["'%s'" % arg for arg in self.options_to_list('args')]
+
+        return ', '.join(args)
 
     def _initialization(self):
-        init = super(Recipe, self)._initialization()
+        init = super(ManageRecipe, self)._initialization()
 
         if not self.options['settings']:
             init += '\n\nadded_settings = %s' % repr(self.added_settings)
@@ -74,7 +76,22 @@ class Recipe(BaseRecipe):
         self.install()
 
 
-class AppsRecipe(Recipe):
+class Recipe(ManageRecipe):
+    """
+    Management recipe with a 'command' option
+    """
+    def __init__(self, buildout, name, options):
+        super(Recipe, self).__init__(buildout, name, options)
+        try:
+            self.command = options['command']
+        except KeyError:
+            if options['args']:
+                return ImproperlyConfigured(
+                    'You must provide a command if you provide args to the '
+                    'manage recipe.')
+
+
+class AppsRecipe(ManageRecipe):
     """
     A management recipe with an 'apps' option
     """

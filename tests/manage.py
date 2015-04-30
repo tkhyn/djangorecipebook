@@ -59,5 +59,6 @@ class ManageRecipeTests(RecipeTests):
         self.recipe.install()
         manage_script = self.script_path('manage')
         self.assertTrue(os.path.exists(manage_script))
-        self.assertIn("djangorecipebook.scripts.manage.main(added_settings)",
-                      self.script_cat(manage_script))
+        self.assertIn(
+            "djangorecipebook.scripts.manage.main(added_settings)",
+            self.script_cat(manage_script))

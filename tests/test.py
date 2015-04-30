@@ -1,25 +1,9 @@
 import os
 import mock
 
-from ._base import ScriptTests, RecipeTests
+from ._base import RecipeTests
 
-from djangorecipebook.scripts.test import main
 from djangorecipebook.recipes.test import Recipe
-
-
-class TestScriptTests(ScriptTests):
-
-    @mock.patch('sys.argv', ['test'])
-    @mock.patch('django.core.management.execute_from_command_line')
-    def test_script(self, mock_execute):
-        # The manage script is a replacement for the default manage.py
-        # script. It has all the same bells and whistles since all it
-        # does is call the normal Django stuff.
-        apps = ('app1', 'app2')
-        main('settings', *apps)
-        self.assertListEqual(mock_execute.call_args[0][0],
-                             ['manage.py', 'test', '--settings=settings']
-                             + list(apps))
 
 
 class TestRecipeTests(RecipeTests):
@@ -42,8 +26,10 @@ class TestRecipeTests(RecipeTests):
         self.recipe.install()
         test_script = self.script_path('test')
         self.assertTrue(os.path.exists(test_script))
-        self.assertIn("djangorecipebook.scripts.test.main(added_settings)",
-                      self.script_cat(test_script))
+        self.assertIn(
+            "djangorecipebook.scripts.manage.main(added_settings, 'test')",
+            self.script_cat(test_script)
+        )
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
                 return_value=(None, []))
@@ -55,9 +41,10 @@ class TestRecipeTests(RecipeTests):
         self.init_recipe({'apps': '\n    '.join(apps)})
         self.recipe.install()
         test_script = self.script_path('test')
-        self.assertIn("djangorecipebook.scripts.test.main(added_settings, %s)"
-                      % ', '.join(["'%s'" % app for app in apps]),
-                      self.script_cat(test_script))
+        self.assertIn(
+            "djangorecipebook.scripts.manage.main(added_settings, 'test', %s)"
+            % ', '.join(["'%s'" % app for app in apps]),
+            self.script_cat(test_script))
 
     @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
                 return_value=(None, []))

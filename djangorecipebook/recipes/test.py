@@ -7,6 +7,8 @@ from .manage import AppsRecipe
 
 class Recipe(AppsRecipe):
 
+    command = 'test'
+
     def __init__(self, buildout, name, options):
         super(Recipe, self).__init__(buildout, name, options)
 

@@ -14,6 +14,9 @@ from ..exceptions import ImproperlyConfigured
 
 class Recipe(AppsRecipe):
 
+    command = None
+    script_path = 'djangorecipebook.scripts.makemigrations'
+
     def __init__(self, buildout, name, options):
         super(Recipe, self).__init__(buildout, name, options)
 
