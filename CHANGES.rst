@@ -41,6 +41,11 @@ Changes
 
 - Added ``command`` option in ``manage`` recipe
 
+1.2.7 (28-07-2015)
+------------------
+
+- Fixed ``main`` functions return values
+
 
 1.1 (03-08-2014)
 ----------------

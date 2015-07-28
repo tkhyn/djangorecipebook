@@ -188,3 +188,5 @@ def main(settings, *args, **kwargs):
             Popen([dj16script] + sys_argv).wait()
 
         make_django_migrations(settings, args + sys_argv)
+
+    return 0

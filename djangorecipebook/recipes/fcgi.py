@@ -78,8 +78,8 @@ class Recipe(BaseRecipe):
             ((venv_setup % venv_path) if venv_path else '') + \
             (self.script_template if self.script_template
                 else _script_template.split('\n', 1)[1])
-            # we use split to strip the 1st line of _script_template, which
-            # is the header
+        # (we use split to strip the 1st line of _script_template, which is
+        # the header)
 
         if self.options['script_path']:
             dest = os.path.normpath(os.path.join(self.options['root_dir'],

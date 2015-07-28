@@ -22,6 +22,10 @@ generating migrations with `Django 1.7+`_, south_ or both.
 djangorecipebook works with django 1.4 to 1.8 and relevant python versions
 (2.6 to 3.4, depending on django version).
 
+If you like djangorecipebook and find it useful, you may want to thank me and
+encourage future development by sending a few mBTC at this Bitcoin address:
+``1EwENyR8RV6tMc1hsLTkPURtn5wJgaBfG9``.
+
 
 Available recipes
 -----------------

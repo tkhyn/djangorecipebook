@@ -65,3 +65,5 @@ def main(settings, command=None, *args):
     from django.core.management import execute_from_command_line
     execute_from_command_line(['manage.py'] + command +
                               settings_arg + sys.argv[1:])
+
+    return 0
