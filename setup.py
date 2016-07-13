@@ -68,6 +68,7 @@ setup(
     install_requires=install_requires,
     extras_require={
         'nose': ('django_nose',),
+        'pytest': ('pytest', 'pytest-django',),
         'south': ('south',),
     },
     zip_safe=False,

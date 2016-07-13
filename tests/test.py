@@ -50,7 +50,7 @@ class TestRecipeTests(RecipeTests):
                 return_value=(None, []))
     def test_install_with_nose(self, working_set):
         # Install of a test script with nose
-        self.init_recipe({'nose': '1'})
+        self.init_recipe({'runner': 'nose'})
         self.recipe.install()
         self.assertListEqual(working_set.call_args[0][0],
                              ['djangorecipebook', 'djangorecipebook[nose]'])
@@ -66,3 +66,12 @@ class TestRecipeTests(RecipeTests):
                       "os.chdir('tests')\n"
                       "sys.path.append(os.getcwd())",
                       self.script_cat(test_script))
+
+    @mock.patch('zc.recipe.egg.egg.Scripts.working_set',
+                return_value=(None, []))
+    def test_install_with_pytest(self, working_set):
+        # Install a test script with pytest
+        self.init_recipe({'runner': 'pytest'})
+        self.recipe.install()
+        self.assertListEqual(working_set.call_args[0][0],
+                             ['djangorecipebook', 'djangorecipebook[pytest]'])

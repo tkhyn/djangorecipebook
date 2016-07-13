@@ -2,6 +2,13 @@ Changes
 =======
 
 
+1.3 (13-07-2016)
+----------------
+
+- Breaking change: ``nose`` option no longer supported in tests
+- Added ``pytest`` support
+
+
 1.2 (22-11-2014)
 ----------------
 
