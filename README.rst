@@ -40,7 +40,7 @@ djangorecipebook:fcgi
    Creates a fcgi script for the project
 
 djangorecipebook:test
-   Creates a script that invokes ``manage.py test [apps]``.
+   Creates a script that invokes ``manage.py test [apps]``, or pytest_
 
 djangorecipebook:makemigrations (new in v1.2)
    Generates south_ and/or Django 1.7+ migrations
@@ -157,22 +157,40 @@ application (wsgi only)
 Test options
 ............
 
-settings, inst_apps, args
-   See `Manage options`_. Note that the ``command`` option is disabled.
+.. warning::
 
-nose
+   When using ``runner = pytest``, the ``settings``, ``inst_apps``, ``apps``
+   options have no effect. You should instead provide a
+   `pytest configuration file`_ in the tests working directory.
+
+runner
+   *Replaces `nose` option from version 1.3*
+
    Use this option if you are using nose_ (and therefore django_nose_) to test
    your Django app or project. This will simply include ``django_nose`` and
    ``nose`` in your buildout.
 
    Defaults to unset.
 
+workingdir
+   The working directory to launch the tests from.
+
+   Defaults to the current
+
+args
+   See `Manage options`_.
+
+settings, inst_apps
+   See `Manage options`_. Note that the ``command`` option is disabled. Not
+   available when using pytest.
+
 apps
    The names of the apps that should be tested, separated by spaces or
    line-breaks. If using minimal settings, these apps will be added to the
    ``INSTALLED_APPS`` (in addition to those in the ``inst_apps`` option).
 
-   Defaults to ``''``, all the apps in ``INSTALLED_APPS``
+   Defaults to ``''``, all the apps in ``INSTALLED_APPS``. Not available when
+   using ``runner = pytest``
 
 
 Makemigrations options
@@ -345,3 +363,5 @@ will be ``mynewproject_parameters``.
 .. _django_nose: https://pypi.python.org/pypi/django-nose
 .. _south: http://south.readthedocs.org
 .. _`Django 1.7+`: https://docs.djangoproject.com/en/dev/topics/migrations/
+.. _pytest: http://pytest.org/
+.. _`pytest configuration file`: http://pytest-django.readthedocs.io/en/latest/tutorial.html
