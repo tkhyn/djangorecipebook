@@ -65,7 +65,7 @@ class BaseRecipe(object):
                     raise ValueError('Invalid environment variable '
                                      'statement: "%s"' % kv)
 
-        if init and not 'import os' in init:
+        if init and 'import os' not in init:
             init = 'import os\n' + init
 
         return init

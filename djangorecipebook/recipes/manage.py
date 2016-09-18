@@ -52,7 +52,7 @@ class ManageRecipe(BaseRecipe):
         init = super(ManageRecipe, self)._initialization()
 
         if not self.options['settings']:
-            init += '\n\nadded_settings = %s' % repr(self.added_settings)
+            init += '\nadded_settings = %s' % repr(self.added_settings)
 
         return init
 

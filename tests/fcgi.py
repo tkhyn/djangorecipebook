@@ -55,7 +55,7 @@ class FCGIRecipeTests(RecipeTests):
         self.init_recipe({'script_path': 'fcgi/app.fcgi'})
         self.recipe.install()
         self.assertTrue(os.path.exists(os.path.join(self.buildout_dir,
-                                                   'fcgi/app.fcgi')))
+                                                    'fcgi/app.fcgi')))
         if sys.platform == 'win32':
             self.assertFalse(os.path.exists(os.path.join(self.bin_dir,
                                                          'fcgi-script.py')))

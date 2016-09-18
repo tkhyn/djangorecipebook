@@ -49,7 +49,7 @@ class GeneralRecipeTests(RecipeTests):
         # When an init code is specified, it should be added to the script
         self.init_recipe({'initialization': 'import os\nassert True'})
         self.recipe.install()
-        self.assertIn('import os\nassert True\n\n'
+        self.assertIn('import os\nassert True\n'
                       'added_settings = {}\n\n'
                       'import djangorecipebook',
                       self.script_cat('manage'))

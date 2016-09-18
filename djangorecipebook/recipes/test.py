@@ -42,10 +42,10 @@ class Recipe(AppsRecipe):
         init = super(Recipe, self)._initialization()
 
         if self.options['workingdir']:
-            init = "os.chdir('%s')\nsys.path.append(os.getcwd())" % \
-                   self.options['workingdir']
+            init += "\nos.chdir('%s')\nsys.path.append(os.getcwd())" % \
+                    self.options['workingdir']
 
-        if init and not 'import os' in init:
+        if init and 'import os' not in init:
             init = 'import os\n' + init
 
         return init
