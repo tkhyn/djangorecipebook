@@ -25,7 +25,7 @@ class Recipe(AppsRecipe):
         self.dj16script = None
 
     def _packages(self):
-        pkgs = ['djangorecipebook']
+        pkgs = super(Recipe, self)._packages()
         if not self.dj17plus:
             pkgs.append('djangorecipebook[south]')
         return pkgs
@@ -50,8 +50,7 @@ class Recipe(AppsRecipe):
 
             name = 'dj16south_schemamigration'
 
-            __, working_set = self.egg.working_set(self._packages() +
-                                                   ['djangorecipebook[south]'])
+            __, working_set = self.egg.working_set(self._packages())
             easy_install.scripts(
                 [(name, self.script_path, 'make_south_from_dj17')],
                 working_set, sys.executable, self.options['part_dir'],

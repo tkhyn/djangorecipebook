@@ -43,7 +43,7 @@ class Recipe(BaseRecipe):
         return "'%s'%s%s" % (self.options['settings'], logfile, loglevel)
 
     def install(self):
-        __, working_set = self.egg.working_set(['djangorecipebook'])
+        __, working_set = self.egg.working_set(self._packages())
 
         venv = self.options['virtualenv']
         venv_path = ''

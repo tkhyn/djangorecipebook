@@ -27,7 +27,7 @@ class Recipe(AppsRecipe):
         options['workingdir'] = workingdir
 
     def _packages(self):
-        pkgs = ['djangorecipebook']
+        pkgs = super(Recipe, self)._packages()
         if self.options['runner']:
             pkgs.append('djangorecipebook[%s]' % self.options['runner'])
         return pkgs

@@ -50,6 +50,9 @@ class BaseRecipe(object):
         except KeyError:
             self.django_version = (999,)  # latest
 
+    def _packages(self):
+        return ['djangorecipebook']
+
     def _initialization(self):
         init = self.options['initialization']
         if self.options['envvars']:

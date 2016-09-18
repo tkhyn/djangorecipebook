@@ -15,9 +15,6 @@ class ManageRecipe(BaseRecipe):
     command = None
     script_path = 'djangorecipebook.scripts.manage'
 
-    def _packages(self):
-        return ['djangorecipebook']
-
     def __init__(self, buildout, name, options):
         options.setdefault('settings', '')
         super(ManageRecipe, self).__init__(buildout, name, options)
