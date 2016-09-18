@@ -8,6 +8,12 @@ Changes
 - Breaking change: ``nose`` option no longer supported in tests
 - Added ``pytest`` support
 
+1.3.1 (19-09-2016)
+------------------
+
+- Added ``gunicorn`` recipe
+- Fixed disappearing added settings when working dir was set
+
 
 1.2 (22-11-2014)
 ----------------
