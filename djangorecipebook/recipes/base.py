@@ -70,6 +70,9 @@ class BaseRecipe(object):
 
         return init
 
+    def _arguments(self):
+        return ''
+
     def options_to_list(self, option):
         value = self.options.get(option, '')
         if value:
