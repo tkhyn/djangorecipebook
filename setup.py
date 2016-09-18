@@ -62,7 +62,7 @@ setup(
         ['%(recipe)s = %(name)s.recipes.%(recipe)s:Recipe' %
             {'recipe': recipe, 'name': name} for recipe
             in ('manage', 'wsgi', 'fcgi', 'test', 'migrate', 'makemigrations',
-                'create')]
+                'create', 'gunicorn')]
         + ['default = %s.recipes.manage:Recipe' % name]
     },
     install_requires=install_requires,
@@ -70,6 +70,7 @@ setup(
         'nose': ('django_nose',),
         'pytest': ('pytest', 'pytest-django',),
         'south': ('south',),
+        'gunicorn': ('gunicorn',),
     },
     zip_safe=False,
 )

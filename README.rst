@@ -36,6 +36,9 @@ djangorecipebook:manage
 djangorecipebook:wsgi
    Creates a wsgi script for the project
 
+djangorecipebook:gunicorn
+   Creates a gunicorn service launcher for the project
+
 djangorecipebook:fcgi
    Creates a fcgi script for the project
 
@@ -117,8 +120,8 @@ args
    Defaults to no arguments.
 
 
-WSGI and FCGI options
-.....................
+WSGI, gunicorn and FCGI options
+...............................
 
 settings
    Must be a settings module, no default minimal settings are available for
@@ -149,10 +152,20 @@ script_path
 
    Defaults to buildout's bin directory with the recipe's name.
 
-application (wsgi only)
-   The path to a user-defined wsgi application.
+application (wsgi and gunicorn only)
+   Used with the ``wsgi`` recipe, it is the dotted path to a user-defined wsgi
+   application, and defaults to the result of django's
+   ``get_wsgi_application()``.
 
-   Defaults to the result of django's ``get_wsgi_application()``
+   Used with the ``gunicorn`` recipe, it can be:
+      - unspecified (default), which means that the ``gunicorn`` script must be
+        called with an parameter defining the WSGI application
+      - a ``path/to/a/wsgi:application``. The ``gunicorn`` script will set the
+        current working directory to ``path/to/a`` and use ``wsgi:application``
+        as the application parameter
+      - ``auto``. The recipe will automatically generate a ``wsgi`` module
+        using the provided ``settings``, ``log-file`` and ``log-level``, and
+        the ``gunicorn`` script will refer to that module
 
 Test options
 ............
