@@ -11,10 +11,15 @@ from .base import BaseRecipe
 from zc.buildout import easy_install
 
 
+if sys.version_info[0] > 2:
+    exec_str = 'exec(open(activate_this).read()'
+else:
+    exec_str = 'execfile(activate_this'
+
 venv_setup = '''
-activate_this = r'%s'
-execfile(activate_this, dict(__file__=activate_this))
-'''
+activate_this = r'%%s'
+%s, dict(__file__=activate_this))
+''' % exec_str
 
 
 class ScriptRecipe(BaseRecipe):

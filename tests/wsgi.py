@@ -173,10 +173,16 @@ class WSGIRecipeTests(RecipeTests):
             with mock.patch.dict(os.environ, WORKON_HOME=workon_home):
                 self.init_recipe({'virtualenv': 'myvenv'})
                 self.recipe.install()
-                self.assertIn("activate_this = r'%s'\n"
-                              "execfile(activate_this, "
-                              "dict(__file__=activate_this))" % act_this_file,
-                              self.script_cat('wsgi'))
+                if sys.version_info[0] > 2:
+                    self.assertIn("activate_this = r'%s'\n"
+                                  "exec(open(activate_this).read(), "
+                                  "dict(__file__=activate_this))"
+                                  % act_this_file, self.script_cat('wsgi'))
+                else:
+                    self.assertIn("activate_this = r'%s'\n"
+                                  "execfile(activate_this, "
+                                  "dict(__file__=activate_this))"
+                                  % act_this_file, self.script_cat('wsgi'))
         finally:
             shutil.rmtree(workon_home)
 
