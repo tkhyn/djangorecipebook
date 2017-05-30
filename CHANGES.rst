@@ -1,6 +1,14 @@
 Changes
 =======
 
+1.4 (30-05-2017)
+----------------
+
+- django 1.11 compatibility
+- suport for django < 1.8 dropped
+- fcgi recipe removed
+- south support dropped (for django < 1.7)
+
 
 1.3 (13-07-2016)
 ----------------

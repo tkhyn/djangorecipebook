@@ -4,9 +4,8 @@ General tests that concern all recipes
 
 import os
 import sys
-import mock
 
-from ._base import RecipeTests, test_project
+from ._base import mock, RecipeTests, test_project
 
 # we use the very simple manage.Recipe to test BaseRecipe functionalities
 from djangorecipebook.recipes import manage

@@ -1,7 +1,6 @@
 import os
-import mock
 
-from ._base import RecipeTests
+from ._base import mock, RecipeTests
 
 from djangorecipebook.recipes.migrate import Recipe
 

@@ -1,9 +1,9 @@
 import os
 
-from . import fcgi, wsgi
+from . import wsgi
 
 
-class Recipe(fcgi.Recipe):
+class Recipe(wsgi.ScriptRecipe):
 
     def __init__(self, buildout, name, options):
 
