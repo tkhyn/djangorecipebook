@@ -44,12 +44,6 @@ class BaseRecipe(object):
 
         options.setdefault('envvars', '')
 
-        try:
-            self.django_version = \
-                tuple(map(int, self.buildout.versions['django'].split(".")))
-        except KeyError:
-            self.django_version = (999,)  # latest
-
     def _packages(self):
         return ['djangorecipebook']
 

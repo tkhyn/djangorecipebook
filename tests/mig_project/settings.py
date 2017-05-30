@@ -15,8 +15,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tests.mig_project.migrated_with_dj17',
-    'tests.mig_project.migrated_with_south',
-    'tests.mig_project.migrated_with_both',
+    'tests.mig_project.migrated',
     'tests.mig_project.unmigrated',
 )

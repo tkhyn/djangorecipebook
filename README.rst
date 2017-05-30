@@ -17,7 +17,7 @@ different settings and/or eggs for each part.
 
 Through its automatic minimal settings generation, djangorecipebook is
 particularly adapted to reusable apps development, e.g. for testing or
-generating migrations with `Django 1.7+`_, south_ or both.
+maintenance (migrations generation).
 
 djangorecipebook works with django 1.4 to 1.8 and relevant python versions
 (2.6 to 3.4, depending on django version).
@@ -43,7 +43,9 @@ djangorecipebook:test
    Creates a script that invokes ``manage.py test [apps]``, or pytest_
 
 djangorecipebook:makemigrations (new in v1.2)
-   Generates south_ and/or Django 1.7+ migrations
+   Generates Django migrations
+   If you need to generate south_ migrations for Django < 1.7, you need to
+   use djangorecipe 1.2.x or 1.3.x
 
 djangorecipebook:migrate (new in v1.2)
    Invokes ``manage.py migrate [apps]``. For the lazy ones.
@@ -216,38 +218,6 @@ apps
    option).
 
    Defaults to ``''``, all the apps in ``INSTALLED_APPS``
-
-south
-   If this option has a value, south_ migrations will also be generated when
-   using Django 1.7+ (behind the scenes, djangorecipebook installs django 1.6.x
-   and south distributions and links them in a separate script that can be
-   found in the parts/djangorecipeboook directory). This option has no effect
-   with Django < 1.7, where ``south`` migrations will always be generated and
-   ``south`` will always be installed if you are using this recipe.
-
-   Defaults to ``undefined`` (no south migrations generation).
-
-
-The ``makemigrations`` recipe will generate:
-
-- Django 1.7+ migrations if you are using Django 1.7+
-- and/or south_ migrations if:
-   - you are using Django 1.7+ and provide a value for the ``south`` option
-   - or you are using Django < 1.7, whatever the value of the ``south`` option
-
-When generating south migrations, the ``--initial`` flag can be provided when
-invoking the script from the command line. ``--initial`` has no effect
-whatsoever on Django 1.7+ migrations.
-
-Additionally, djangorecipebook will detect the apps where south migrations must
-be initialised, and automatically add the ``--auto``. That means you do not
-have to worry anymore about providing ``--auto`` or ``--initial`` flags.
-
-If you are using Django 1.7+ and have south_ migrations in the
-``app.migrations`` package, djangorecipebook will automatically rename this
-existing package to ``app.south_migrations`` and place the Django 1.7+
-migrations in ``app.migrations``. From south 1.0.0, south migrations placed
-in the ``south_migrations`` module are detected.
 
 
 Migrate options

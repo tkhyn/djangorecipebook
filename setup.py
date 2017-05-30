@@ -68,7 +68,6 @@ setup(
     extras_require={
         'nose': ('django_nose',),
         'pytest': ('pytest', 'pytest-django',),
-        'south': ('south',),
         'gunicorn': ('gunicorn',),
     },
     zip_safe=False,
