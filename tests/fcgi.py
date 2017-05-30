@@ -3,9 +3,8 @@
 
 import os
 import sys
-import mock
 
-from ._base import ScriptTests, RecipeTests, test_settings
+from ._base import mock, ScriptTests, RecipeTests, test_settings
 
 from djangorecipebook.scripts.fcgi import  main
 from djangorecipebook.recipes.fcgi import Recipe

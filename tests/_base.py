@@ -2,21 +2,22 @@
 # (c) Roland van Laar, BSD license, [https://github.com/rvanlaar/djangorecipe]
 # and were simply adapted to the needs of djangorecipebook
 
-
-__test__ = False
-
 import sys
 import os
 import shutil
 import tempfile
-import mock
+import unittest
 
 try:
-    import unittest2 as unittest  # for python 2.6
+    from unittest import mock
 except ImportError:
-    import unittest
+    # python2
+    import mock
 
 from zc.buildout.testing import TestOptions, Buildout
+
+
+__test__ = False
 
 
 test_project = 'project'

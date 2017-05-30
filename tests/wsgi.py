@@ -1,13 +1,12 @@
 import os
 import sys
-import mock
 import logging
 import tempfile
 import shutil
 
 from testfixtures import log_capture
 
-from ._base import ScriptTests, RecipeTests, test_settings
+from ._base import mock, ScriptTests, RecipeTests, test_settings
 
 from djangorecipebook.scripts.wsgi import main
 from djangorecipebook.recipes.wsgi import Recipe

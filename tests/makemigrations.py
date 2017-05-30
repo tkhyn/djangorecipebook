@@ -9,11 +9,10 @@ except ImportError:
     # python 2
     import __builtin__ as builtins
 
-import mock
 import django
 from django.utils.six import iteritems
 
-from ._base import ScriptTests, RecipeTests
+from ._base import mock, ScriptTests, RecipeTests
 
 from djangorecipebook.scripts.makemigrations \
     import main, make_south_migrations, make_south_from_dj17, SouthWarning
