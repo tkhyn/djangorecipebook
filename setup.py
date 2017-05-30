@@ -25,7 +25,7 @@ DEV_STATUS = {'pre': '2 - Pre-Alpha',
 install_requires = [
     'zc.buildout',
     'zc.recipe.egg',
-    'django>=1.4',
+    'django>=1.8',
 ]
 
 try:
@@ -46,8 +46,7 @@ setup(
     keywords=['django', 'buildout', 'recipe'],
     classifiers=[
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
