@@ -39,9 +39,6 @@ djangorecipebook:wsgi
 djangorecipebook:gunicorn
    Creates a gunicorn service launcher for the project
 
-djangorecipebook:fcgi
-   Creates a fcgi script for the project
-
 djangorecipebook:test
    Creates a script that invokes ``manage.py test [apps]``, or pytest_
 
@@ -120,12 +117,12 @@ args
    Defaults to no arguments.
 
 
-WSGI, gunicorn and FCGI options
-...............................
+WSGI and gunicorn options
+.........................
 
 settings
    Must be a settings module, no default minimal settings are available for
-   wsgi and fcgi recipes.
+   these recipes.
 
 log-file
    The path to a log file where all stdout and/or stderr data should be
@@ -140,7 +137,7 @@ log-level
    Defaults to ``INFO``.
 
 virtualenv
-   The virtualenv that should be used to run the wsgi/fcgi script. This
+   The virtualenv that should be used to run the wsgi script. This
    requires virtualenv **and** virtualenvwrapper, as it relies upon the
    ``WORKON_HOME`` environment variable.
 

@@ -60,7 +60,7 @@ setup(
     entry_points={'zc.buildout':
         ['%(recipe)s = %(name)s.recipes.%(recipe)s:Recipe' %
             {'recipe': recipe, 'name': name} for recipe
-            in ('manage', 'wsgi', 'fcgi', 'test', 'migrate', 'makemigrations',
+            in ('manage', 'wsgi', 'test', 'migrate', 'makemigrations',
                 'create', 'gunicorn')]
         + ['default = %s.recipes.manage:Recipe' % name]
     },
