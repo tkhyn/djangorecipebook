@@ -8,13 +8,14 @@ import os
 import sys
 import logging
 from importlib import import_module
+from io import TextIOBase
 
 
 def setup_logging(logfile, level, logger_name):
 
     if logfile:
         # setup logging
-        class StdStrLogger(object):
+        class StdStrLogger(TextIOBase):
             def __init__(self, logger, level):
                 self.logger = logger
                 self.log_level = level
