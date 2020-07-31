@@ -42,7 +42,7 @@ setup(
     long_description=open('README.rst').read(),
     author='Thomas Khyn',
     author_email='thomas@ksytek.com',
-    url='https://bitbucket.org/tkhyn/djangorecipebook/',
+    url='https://github.com/tkhyn/djangorecipebook/',
     keywords=['django', 'buildout', 'recipe'],
     classifiers=[
         'Programming Language :: Python',
