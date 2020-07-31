@@ -1,6 +1,12 @@
 Changes
 =======
 
+1.5 (31-07-2020)
+----------------
+
+- django 3.0 compatibility
+- support for django < 2.2 dropped
+
 1.4 (30-05-2017)
 ----------------
 

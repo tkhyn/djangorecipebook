@@ -1,7 +1,7 @@
 djangorecipebook
 ================
 
-|copyright| 2014-2015 Thomas Khyn
+|copyright| 2014-2020 Thomas Khyn
 
 Buildout recipes for django development
 
@@ -19,11 +19,11 @@ Through its automatic minimal settings generation, djangorecipebook is
 particularly adapted to reusable apps development, e.g. for testing or
 maintenance (migrations generation).
 
-djangorecipebook works with django 1.4 to 1.8 and relevant python versions
-(2.6 to 3.4, depending on django version).
+djangorecipebook works with django 2.2 and 3.0 and relevant python versions
+(3.5 to 3.8, depending on django version).
 
 If you like djangorecipebook and find it useful, you may want to thank me and
-encourage future development by sending a few mBTC at this Bitcoin address:
+encourage future development by sending a few mBTC / mBCH / mBSV at this address:
 ``1EwENyR8RV6tMc1hsLTkPURtn5wJgaBfG9``.
 
 

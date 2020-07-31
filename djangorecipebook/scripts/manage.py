@@ -27,14 +27,13 @@ DEFAULT_SETTINGS = dict(
 def main(settings, command=None, *args):
 
     from django.conf import settings as dj_settings
-    from django.utils.six import string_types
 
     settings_arg = []
     for arg in sys.argv:
         if arg.startswith('--settings='):
             break
     else:
-        if isinstance(settings, string_types):
+        if isinstance(settings, str):
             settings_arg = ['--settings=' + settings]
         elif isinstance(settings, dict):
             # using default settings, eventually amended
