@@ -1,16 +1,5 @@
 import os
-import sys
 import shutil
-
-try:
-    # python 3
-    import builtins
-except ImportError:
-    # python 2
-    import __builtin__ as builtins
-
-import django
-from django.utils.six import iteritems
 
 from ._base import mock, ScriptTests, RecipeTests
 
