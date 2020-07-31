@@ -1,0 +1,27 @@
+# distutils generated files and folders
+build
+dist
+MANIFEST
+
+# buildout files and folders
+bin
+.installed.cfg
+djangorecipebook.egg-info
+
+# coverage
+tests/.coverage
+
+# tox
+.tox
+
+# python binary files
+*.pyc
+
+# locale binary files
+*.mo
+
+# log files
+*.log
+
+# Windows thumbnails
+**/thumbs.db
