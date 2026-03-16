@@ -5,7 +5,7 @@ dev
 ---
 
 - django 3.0+ compatibility
-- support for django < 2.2 dropped
+- support for django < 5.2 dropped
 - use py.test instead of nose in tests
 
 1.4 (30-05-2017)

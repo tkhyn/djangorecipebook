@@ -19,8 +19,8 @@ Through its automatic minimal settings generation, djangorecipebook is
 particularly adapted to reusable apps development, e.g. for testing or
 maintenance (migrations generation).
 
-djangorecipebook works with django 2.2 and 3.0 and relevant python versions
-(3.5 to 3.8, depending on django version).
+djangorecipebook works with django 5.2 and 6.0 and relevant python versions
+(3.10 to 3.14, depending on django version).
 
 If you like djangorecipebook and find it useful, you may want to thank me and
 encourage future development by sending a few mBTC / mBCH / mBSV at this address:

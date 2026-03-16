@@ -25,7 +25,7 @@ DEV_STATUS = {'pre': '2 - Pre-Alpha',
 install_requires = [
     'zc.buildout',
     'zc.recipe.egg',
-    'django>=2.2',
+    'django>=5.2',
 ]
 
 try:
