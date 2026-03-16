@@ -169,18 +169,13 @@ application (wsgi and gunicorn only)
 Test options
 ............
 
-.. warning::
-
-   When using ``runner = pytest``, the ``settings``, ``inst_apps``, ``apps``
-   options have no effect. You should instead provide a
-   `pytest configuration file`_ in the tests working directory.
-
 runner
    *Replaces `nose` option from version 1.3*
 
-   Use this option if you are using nose_ (and therefore django_nose_) to test
-   your Django app or project. This will simply include ``django_nose`` and
-   ``nose`` in your buildout.
+   Use this option to specify the test runner to use: ``pytest`` (recommended) or ``nose``.
+   When using ``runner = pytest``, the ``settings``, ``inst_apps``, ``apps``
+   options have no effect. You should instead provide a
+   `pytest configuration file`_ in the tests working directory.
 
    Defaults to unset.
 
