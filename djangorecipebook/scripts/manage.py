@@ -12,7 +12,6 @@ DEFAULT_SETTINGS = dict(
             'ENGINE': 'django.db.backends.sqlite3'
         }
     },
-    MIDDLEWARE_CLASSES=(),
     INSTALLED_APPS=(
         'django.contrib.admin',
         'django.contrib.auth',
