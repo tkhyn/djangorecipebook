@@ -58,7 +58,7 @@ def main(settings, command=None, *args):
                              'required when calling manage.py.')
 
     # the arguments need to be inserted in sys.argv as subsequent packages
-    # (e.g. nose) may use sys.argv and forget about what is passed to manage.py
+    # may use sys.argv and forget about what is passed to manage.py
     sys.argv[1:1] = args
 
     from django.core.management import execute_from_command_line

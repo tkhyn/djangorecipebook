@@ -14,12 +14,7 @@ class Recipe(AppsRecipe):
     def __init__(self, buildout, name, options):
         super(Recipe, self).__init__(buildout, name, options)
 
-        options.setdefault('runner', '')
-        assert options['runner'] in ('', 'nose', 'pytest'), 'Unsupported runner'
-
-        self.pytest = options['runner'] == 'pytest'
-        if self.pytest:
-            self.script_path = 'djangorecipebook.scripts.pytest'
+        self.script_path = 'djangorecipebook.scripts.pytest'
 
         workingdir = options.get('workingdir', '')
         if workingdir:
@@ -28,15 +23,11 @@ class Recipe(AppsRecipe):
 
     def _packages(self):
         pkgs = super(Recipe, self)._packages()
-        if self.options['runner']:
-            pkgs.append('djangorecipebook[%s]' % self.options['runner'])
+        pkgs.append('djangorecipebook[pytest]')
         return pkgs
 
     def _arguments(self):
-        if self.pytest:
-            args = ["'%s'" % arg for arg in self.options_to_list('args')]
-            return ', '.join(args)
-        return super(Recipe, self)._arguments()
+        return ', '.join(["'%s'" % arg for arg in self.options_to_list('args')])
 
     def _initialization(self):
         init = super(Recipe, self)._initialization()

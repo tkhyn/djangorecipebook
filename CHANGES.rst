@@ -4,6 +4,7 @@ Changes
 dev
 ---
 
+- Breaking change: remove support for nose tests runner and only use pytest
 - django 3.0+ compatibility
 - support for django < 5.2 dropped
 - use py.test instead of nose in tests

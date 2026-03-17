@@ -40,7 +40,7 @@ djangorecipebook:gunicorn
    Creates a gunicorn service launcher for the project
 
 djangorecipebook:test
-   Creates a script that invokes ``manage.py test [apps]``, or pytest_
+   Creates a script that invokes pytest_
 
 djangorecipebook:makemigrations (new in v1.2)
    Generates Django migrations
@@ -169,35 +169,13 @@ application (wsgi and gunicorn only)
 Test options
 ............
 
-runner
-   *Replaces `nose` option from version 1.3*
-
-   Use this option to specify the test runner to use: ``pytest`` (recommended) or ``nose``.
-   When using ``runner = pytest``, the ``settings``, ``inst_apps``, ``apps``
-   options have no effect. You should instead provide a
-   `pytest configuration file`_ in the tests working directory.
-
-   Defaults to unset.
-
 workingdir
    The working directory to launch the tests from.
 
-   Defaults to the current
+   Defaults to the package directory
 
 args
    See `Manage options`_.
-
-settings, inst_apps
-   See `Manage options`_. Note that the ``command`` option is disabled. Not
-   available when using pytest.
-
-apps
-   The names of the apps that should be tested, separated by spaces or
-   line-breaks. If using minimal settings, these apps will be added to the
-   ``INSTALLED_APPS`` (in addition to those in the ``inst_apps`` option).
-
-   Defaults to ``''``, all the apps in ``INSTALLED_APPS``. Not available when
-   using ``runner = pytest``
 
 
 Makemigrations options
@@ -334,8 +312,6 @@ will be ``mynewproject_parameters``.
 
 .. |copyright| unicode:: 0xA9
 .. _djangorecipe: https://github.com/rvanlaar/djangorecipe
-.. _nose: http://nose.readthedocs.org/en/latest/
-.. _django_nose: https://pypi.python.org/pypi/django-nose
 .. _south: http://south.readthedocs.org
 .. _`Django 1.7+`: https://docs.djangoproject.com/en/dev/topics/migrations/
 .. _pytest: http://pytest.org/
