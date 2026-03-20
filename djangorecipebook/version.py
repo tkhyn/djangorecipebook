@@ -1,4 +1,4 @@
-__version_info__ = (2, 0, 0, 'final', 0)
+__version_info__ = (2, 1, 0, 'alpha', 0)
 
 import subprocess
 
