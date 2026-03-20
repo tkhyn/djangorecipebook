@@ -1,6 +1,14 @@
 Changes
 =======
 
+2.0 (21-03-2026)
+----------------
+
+- Breaking change: remove support for nose tests runner and use pytest exclusively
+- django 5.2+ compatibility
+- support for django < 5.2 dropped
+- use py.test instead of nose in package tests
+
 1.5 (31-07-2020)
 ----------------
 

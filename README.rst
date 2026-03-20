@@ -19,8 +19,8 @@ Through its automatic minimal settings generation, djangorecipebook is
 particularly adapted to reusable apps development, e.g. for testing or
 maintenance (migrations generation).
 
-djangorecipebook works with django 2.2 and 3.0 and relevant python versions
-(3.5 to 3.8, depending on django version).
+djangorecipebook works with django 5.2 and 6.0 and relevant python versions
+(3.10 to 3.14, depending on django version).
 
 If you like djangorecipebook and find it useful, you may want to thank me and
 encourage future development by sending a few mBTC / mBCH / mBSV at this address:
@@ -40,7 +40,7 @@ djangorecipebook:gunicorn
    Creates a gunicorn service launcher for the project
 
 djangorecipebook:test
-   Creates a script that invokes ``manage.py test [apps]``, or pytest_
+   Creates a script that invokes pytest_
 
 djangorecipebook:makemigrations (new in v1.2)
    Generates Django migrations
@@ -169,40 +169,13 @@ application (wsgi and gunicorn only)
 Test options
 ............
 
-.. warning::
-
-   When using ``runner = pytest``, the ``settings``, ``inst_apps``, ``apps``
-   options have no effect. You should instead provide a
-   `pytest configuration file`_ in the tests working directory.
-
-runner
-   *Replaces `nose` option from version 1.3*
-
-   Use this option if you are using nose_ (and therefore django_nose_) to test
-   your Django app or project. This will simply include ``django_nose`` and
-   ``nose`` in your buildout.
-
-   Defaults to unset.
-
 workingdir
    The working directory to launch the tests from.
 
-   Defaults to the current
+   Defaults to the package directory
 
 args
    See `Manage options`_.
-
-settings, inst_apps
-   See `Manage options`_. Note that the ``command`` option is disabled. Not
-   available when using pytest.
-
-apps
-   The names of the apps that should be tested, separated by spaces or
-   line-breaks. If using minimal settings, these apps will be added to the
-   ``INSTALLED_APPS`` (in addition to those in the ``inst_apps`` option).
-
-   Defaults to ``''``, all the apps in ``INSTALLED_APPS``. Not available when
-   using ``runner = pytest``
 
 
 Makemigrations options
@@ -339,8 +312,6 @@ will be ``mynewproject_parameters``.
 
 .. |copyright| unicode:: 0xA9
 .. _djangorecipe: https://github.com/rvanlaar/djangorecipe
-.. _nose: http://nose.readthedocs.org/en/latest/
-.. _django_nose: https://pypi.python.org/pypi/django-nose
 .. _south: http://south.readthedocs.org
 .. _`Django 1.7+`: https://docs.djangoproject.com/en/dev/topics/migrations/
 .. _pytest: http://pytest.org/

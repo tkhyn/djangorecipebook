@@ -25,7 +25,7 @@ DEV_STATUS = {'pre': '2 - Pre-Alpha',
 install_requires = [
     'zc.buildout',
     'zc.recipe.egg',
-    'django>=1.8',
+    'django>=5.2',
 ]
 
 try:
@@ -42,7 +42,7 @@ setup(
     long_description=open('README.rst').read(),
     author='Thomas Khyn',
     author_email='thomas@ksytek.com',
-    url='https://bitbucket.org/tkhyn/djangorecipebook/',
+    url='https://github.com/tkhyn/djangorecipebook/',
     keywords=['django', 'buildout', 'recipe'],
     classifiers=[
         'Programming Language :: Python',
@@ -65,7 +65,6 @@ setup(
     },
     install_requires=install_requires,
     extras_require={
-        'nose': ('django_nose',),
         'pytest': ('pytest', 'pytest-django',),
         'gunicorn': ('gunicorn',),
     },

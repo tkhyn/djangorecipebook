@@ -12,7 +12,6 @@ DEFAULT_SETTINGS = dict(
             'ENGINE': 'django.db.backends.sqlite3'
         }
     },
-    MIDDLEWARE_CLASSES=(),
     INSTALLED_APPS=(
         'django.contrib.admin',
         'django.contrib.auth',
@@ -48,21 +47,22 @@ def main(settings, command=None, *args):
                 new_settings = DEFAULT_SETTINGS
             dj_settings.configure(**new_settings)
 
+    argv = sys.argv.copy()
     if command:
         command = [command]
     else:
         try:
-            command = [sys.argv.pop(1)]
+            command = [argv.pop(1)]
         except IndexError:
             raise ValueError('No django command found. A django command is '
                              'required when calling manage.py.')
 
     # the arguments need to be inserted in sys.argv as subsequent packages
-    # (e.g. nose) may use sys.argv and forget about what is passed to manage.py
-    sys.argv[1:1] = args
+    # may use sys.argv and forget about what is passed to manage.py
+    argv[1:1] = args
 
     from django.core.management import execute_from_command_line
     execute_from_command_line(['manage.py'] + command +
-                              settings_arg + sys.argv[1:])
+                              settings_arg + argv[1:])
 
     return 0

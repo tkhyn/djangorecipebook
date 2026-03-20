@@ -10,11 +10,11 @@ Before you start playing around, you may need the information that follows.
 The tests
 ---------
 
-djangorecipebook uses nose_ for testing. All the tests are in the ``tests``
-directory, and the nose test runner uses the ``all-modules`` option which
-is defined in ``setup.cfg``. This means that any object which is not intended
+djangorecipebook uses pytest_ for testing. All the test files are in the ``tests``
+directory, and the pytest test runner uses the configuration defined in
+``setup.cfg``. For good measure, any file that is not intended
 to contain tests (e.g. a base class module) shall contain the statement
-``__test__ = False``.
+``__test__ = False``, in addition to have its name prefixed by `_`.
 
 The ``setup.cfg`` file also contains coverage pre-configuration information,
 but coverage is disabled by default.
@@ -40,8 +40,7 @@ Simply generate the test scripts as above and, from the main directory, type::
 
    $ bin/tests
 
-For coverage information, you can add ``--with-coverage`` to the above test
-command but it's more convenient to use the shortcut::
+For coverage information, use the shortcut::
 
    $ bin/coverage
 
@@ -55,7 +54,7 @@ tests from within an IDE, for example). To do this:
 
 And simply use::
 
-   $ nosetests [options]
+   $ pytest [options]
 
 
 Running the tox suite
@@ -75,5 +74,5 @@ the main directory::
 
 
 .. _zc.buildout: http://www.buildout.org/en/latest/
-.. _nose: http://nose.readthedocs.org/en/latest/
+.. _pytest: https://docs.pytest.org/
 .. _tox: https://testrun.org/tox/
